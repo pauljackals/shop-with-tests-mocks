@@ -110,9 +110,13 @@ class TestShopDatabase(unittest.TestCase):
             **client_new
         })
 
-    def test_client_post_wrong_type(self):
+    def test_client_post_wrong_type_name(self):
         with self.assertRaisesRegex(TypeError, "^Both names must be non-empty strings$"):
-            self.shop_database.client_post('', 'Red', 'harry_red@example.com')
+            self.shop_database.client_post(434, 'Red', 'harry_red@example.com')
+
+    def test_client_post_empty_name(self):
+        with self.assertRaisesRegex(TypeError, "^Both names must be non-empty strings$"):
+            self.shop_database.client_post('Harry', '', 'harry_red@example.com')
 
     def tearDown(self):
         self.shop_database = None

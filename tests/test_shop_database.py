@@ -84,6 +84,10 @@ class TestShopDatabase(unittest.TestCase):
         with self.assertRaisesRegex(ConnectionError, "^Can't get clients from database$"):
             self.shop_database.clients_get()
 
+    def test_clients_get_mock_check(self):
+        self.shop_database.clients_get()
+        self.shop_database.request.assert_called_once_with('get', self.api_url + '/clients/')
+
     def tearDown(self):
         self.shop_database = None
 

@@ -160,6 +160,11 @@ class TestShopDatabase(unittest.TestCase):
         with self.assertRaisesRegex(LookupError, "^Client with such ID doesn't exist$"):
             self.shop_database.client_delete(999)
 
+    def test_client_delete_connection_error(self):
+        self.shop_database.request.side_effect = requests.ConnectionError
+        with self.assertRaisesRegex(ConnectionError, "^Can't delete client from database$"):
+            self.shop_database.client_delete(1)
+
     def tearDown(self):
         self.shop_database = None
         self.api_url = None

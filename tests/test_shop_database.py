@@ -79,6 +79,11 @@ class TestShopDatabase(unittest.TestCase):
     def test_clients_get(self):
         self.assertListEqual(self.shop_database.clients_get(), self.database['clients'])
 
+    def test_clients_get_connection_error(self):
+        self.shop_database.request.side_effect = requests.ConnectionError
+        with self.assertRaisesRegex(ConnectionError, "^Can't get clients from database$"):
+            self.shop_database.clients_get()
+
     def tearDown(self):
         self.shop_database = None
 

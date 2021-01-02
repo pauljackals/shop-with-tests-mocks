@@ -77,15 +77,15 @@ class TestShopDatabase(unittest.TestCase):
         self.shop_database.request.assert_called_once_with('get', self.api_url + '/clients/' + str(id_client))
 
     def test_clients_get(self):
-        self.assertListEqual(self.shop_database.clients_get(), self.database['clients'])
+        self.assertListEqual(self.shop_database.client_get(), self.database['clients'])
 
     def test_clients_get_connection_error(self):
         self.shop_database.request.side_effect = requests.ConnectionError
         with self.assertRaisesRegex(ConnectionError, "^Can't get clients from database$"):
-            self.shop_database.clients_get()
+            self.shop_database.client_get()
 
     def test_clients_get_mock_check(self):
-        self.shop_database.clients_get()
+        self.shop_database.client_get()
         self.shop_database.request.assert_called_once_with('get', self.api_url + '/clients/')
 
     def tearDown(self):

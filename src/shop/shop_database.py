@@ -10,22 +10,16 @@ class ShopDatabase:
             self.api_url = api_url
             self.request = requests.request
 
-    def client_get(self, id_client):
-        if type(id_client) != int:
+    def client_get(self, id_client=None):
+        if id_client is not None and type(id_client) != int:
             raise TypeError("Client ID must an integer")
         else:
             try:
-                response = self.request('get', self.api_url + '/clients/' + str(id_client))
+                response = self.request('get', self.api_url + '/clients/' + ('' if id_client is None else str(id_client)))
                 if response.status_code == 404:
                     raise LookupError("Client with such ID doesn't exist")
                 else:
                     return response.json()
             except requests.RequestException:
-                raise ConnectionError("Can't get client from database")
-
-    def clients_get(self):
-        try:
-            response = self.request('get', self.api_url + '/clients/')
-            return response.json()
-        except requests.RequestException:
-            raise ConnectionError("Can't get clients from database")
+                suffix = id_client is None and 's' or ''
+                raise ConnectionError("Can't get client" + suffix + " from database")

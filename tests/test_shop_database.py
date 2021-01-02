@@ -1,6 +1,7 @@
 import unittest
 from src.shop.shop_database import ShopDatabase
 from unittest.mock import Mock
+import requests
 
 
 class TestShopDatabase(unittest.TestCase):
@@ -57,6 +58,11 @@ class TestShopDatabase(unittest.TestCase):
     def test_client_get_missing(self):
         with self.assertRaisesRegex(LookupError, "^Client with such ID doesn't exist$"):
             self.shop_database.client_get(999)
+
+    def test_client_get_connection_error(self):
+        self.shop_database.request.side_effect = requests.ConnectionError
+        with self.assertRaisesRegex(ConnectionError, "^Can't get client from database$"):
+            self.shop_database.client_get(1)
 
     def tearDown(self):
         self.shop_database = None

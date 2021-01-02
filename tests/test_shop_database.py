@@ -11,6 +11,10 @@ class TestShopDatabase(unittest.TestCase):
         with self.assertRaisesRegex(TypeError, "^Api URL must be a valid url string$"):
             ShopDatabase(545)
 
+    def test_init_invalid(self):
+        with self.assertRaisesRegex(TypeError, "^Api URL must be a valid url string$"):
+            ShopDatabase('http://examplecom')
+
 
 if __name__ == '__main__':
     unittest.main()

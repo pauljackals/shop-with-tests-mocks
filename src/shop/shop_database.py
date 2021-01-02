@@ -11,5 +11,8 @@ class ShopDatabase:
             self.request = requests.request
 
     def client_get(self, id_client):
-        response = self.request('get', self.api_url + '/clients/' + str(id_client))
-        return response.json()
+        if type(id_client) != int:
+            raise TypeError("Client ID must an integer")
+        else:
+            response = self.request('get', self.api_url + '/clients/' + str(id_client))
+            return response.json()

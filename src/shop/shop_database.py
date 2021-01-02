@@ -31,6 +31,8 @@ class ShopDatabase:
             raise TypeError("Names and email must be strings")
         elif name_first == '' or name_last == '':
             raise ValueError("Both names must be non-empty")
+        elif not re.match(r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)", email):
+            raise ValueError("Email must be valid")
         else:
             response = self.request('post', self.api_url + '/clients/', data={
                 'name_first': name_first,

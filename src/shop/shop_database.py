@@ -46,3 +46,7 @@ class ShopDatabase:
                     return response.json()
             except requests.RequestException:
                 raise ConnectionError("Can't post client to database")
+
+    def client_delete(self, id_client):
+        response = self.request('delete', self.api_url + '/clients/' + str(id_client))
+        return response.json()

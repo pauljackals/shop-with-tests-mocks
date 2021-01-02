@@ -43,6 +43,10 @@ class TestShopDatabase(unittest.TestCase):
                             return TestResponse(entity, 200)
                     return TestResponse({}, 404)
             elif method == 'post':
+                if endpoint == 'clients':
+                    for entity in self.database[endpoint]:
+                        if entity['email'] == data['email']:
+                            return TestResponse({}, 409)
                 return TestResponse({
                     'id': get_new_id(endpoint),
                     **data
@@ -130,6 +134,10 @@ class TestShopDatabase(unittest.TestCase):
         self.shop_database.request.side_effect = requests.ConnectionError
         with self.assertRaisesRegex(ConnectionError, "^Can't post client to database$"):
             self.shop_database.client_post('Harry', 'Red', 'harry_red@example.com')
+
+    def test_clients_post_non_unique_email(self):
+        with self.assertRaisesRegex(ValueError, "^Can't post this client \\(email must be unique\\)$"):
+            self.shop_database.client_post('Harry', 'Red', 'jane_blue@example.com')
 
     def tearDown(self):
         self.shop_database = None

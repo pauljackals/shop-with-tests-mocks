@@ -152,6 +152,10 @@ class TestShopDatabase(unittest.TestCase):
         id_client = 1
         self.assertDictEqual(self.shop_database.client_delete(id_client), self.database['clients'][id_client])
 
+    def test_client_delete_wrong_type(self):
+        with self.assertRaisesRegex(TypeError, "^Client ID must an integer$"):
+            self.shop_database.client_delete('1')
+
     def tearDown(self):
         self.shop_database = None
         self.api_url = None

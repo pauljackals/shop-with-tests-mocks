@@ -156,6 +156,10 @@ class TestShopDatabase(unittest.TestCase):
         with self.assertRaisesRegex(TypeError, "^Client ID must an integer$"):
             self.shop_database.client_delete('1')
 
+    def test_client_delete_missing(self):
+        with self.assertRaisesRegex(LookupError, "^Client with such ID doesn't exist$"):
+            self.shop_database.client_delete(999)
+
     def tearDown(self):
         self.shop_database = None
         self.api_url = None

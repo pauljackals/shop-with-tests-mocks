@@ -126,6 +126,11 @@ class TestShopDatabase(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "^Email must be valid$"):
             self.shop_database.client_post('Harry', 'Red', 'harry_red@examplecom')
 
+    def test_clients_post_connection_error(self):
+        self.shop_database.request.side_effect = requests.ConnectionError
+        with self.assertRaisesRegex(ConnectionError, "^Can't post client to database$"):
+            self.shop_database.client_post('Harry', 'Red', 'harry_red@example.com')
+
     def tearDown(self):
         self.shop_database = None
         self.api_url = None

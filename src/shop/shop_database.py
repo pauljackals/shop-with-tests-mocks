@@ -27,8 +27,10 @@ class ShopDatabase:
                 raise ConnectionError("Can't get client" + suffix + " from database")
 
     def client_post(self, name_first, name_last, email):
-        if type(name_first) != str or name_first == '' or type(name_last) != str or name_last == '':
-            raise TypeError("Both names must be non-empty strings")
+        if type(name_first) != str or type(name_last) != str:
+            raise TypeError("Both names must be strings")
+        elif name_first == '' or name_last == '':
+            raise ValueError("Both names must be non-empty")
         else:
             response = self.request('post', self.api_url + '/clients/', data={
                 'name_first': name_first,

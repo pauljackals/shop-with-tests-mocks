@@ -23,3 +23,11 @@ class ShopDatabase:
             except requests.RequestException:
                 suffix = id_client is None and 's' or ''
                 raise ConnectionError("Can't get client" + suffix + " from database")
+
+    def client_post(self, name_first, name_last, email):
+        response = self.request('post', self.api_url + '/clients/', data={
+            'name_first': name_first,
+            'name_last': name_last,
+            'email': email
+        })
+        return response.json()

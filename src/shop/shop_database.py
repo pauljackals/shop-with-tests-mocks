@@ -14,5 +14,11 @@ class ShopDatabase:
         if type(id_client) != int:
             raise TypeError("Client ID must an integer")
         else:
-            response = self.request('get', self.api_url + '/clients/' + str(id_client))
-            return response.json()
+            try:
+                response = self.request('get', self.api_url + '/clients/' + str(id_client))
+                if response.status_code == 404:
+                    raise LookupError("Client with such ID doesn't exist")
+                else:
+                    return response.json()
+            except requests.RequestException:
+                raise ConnectionError("Can't get client from database")

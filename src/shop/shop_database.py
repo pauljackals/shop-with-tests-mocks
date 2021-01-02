@@ -34,9 +34,12 @@ class ShopDatabase:
         elif not re.match(r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)", email):
             raise ValueError("Email must be valid")
         else:
-            response = self.request('post', self.api_url + '/clients/', data={
-                'name_first': name_first,
-                'name_last': name_last,
-                'email': email
-            })
-            return response.json()
+            try:
+                response = self.request('post', self.api_url + '/clients/', data={
+                    'name_first': name_first,
+                    'name_last': name_last,
+                    'email': email
+                })
+                return response.json()
+            except requests.RequestException:
+                raise ConnectionError("Can't post client to database")

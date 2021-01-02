@@ -14,7 +14,7 @@ class ShopDatabase:
 
     def client_get(self, id_client=None):
         if id_client is not None and type(id_client) != int:
-            raise TypeError("Client ID must an integer")
+            raise TypeError("Client ID must be an integer")
         else:
             try:
                 response = self.request('get', self.api_url + '/clients/' + ('' if id_client is None else str(id_client)))
@@ -49,7 +49,7 @@ class ShopDatabase:
 
     def client_delete(self, id_client):
         if type(id_client) != int:
-            raise TypeError("Client ID must an integer")
+            raise TypeError("Client ID must be an integer")
         else:
             try:
                 response = self.request('delete', self.api_url + '/clients/' + str(id_client))

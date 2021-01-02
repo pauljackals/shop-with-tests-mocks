@@ -74,7 +74,7 @@ class TestShopDatabase(unittest.TestCase):
         self.assertDictEqual(self.shop_database.client_get(id_client), self.database['clients'][id_client])
 
     def test_client_get_wrong_type(self):
-        with self.assertRaisesRegex(TypeError, "^Client ID must an integer$"):
+        with self.assertRaisesRegex(TypeError, "^Client ID must be an integer$"):
             self.shop_database.client_get('1')
 
     def test_client_get_missing(self):
@@ -153,7 +153,7 @@ class TestShopDatabase(unittest.TestCase):
         self.assertDictEqual(self.shop_database.client_delete(id_client), self.database['clients'][id_client])
 
     def test_client_delete_wrong_type(self):
-        with self.assertRaisesRegex(TypeError, "^Client ID must an integer$"):
+        with self.assertRaisesRegex(TypeError, "^Client ID must be an integer$"):
             self.shop_database.client_delete('1')
 
     def test_client_delete_missing(self):

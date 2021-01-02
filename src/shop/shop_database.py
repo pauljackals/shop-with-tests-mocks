@@ -52,4 +52,7 @@ class ShopDatabase:
             raise TypeError("Client ID must an integer")
         else:
             response = self.request('delete', self.api_url + '/clients/' + str(id_client))
-            return response.json()
+            if response.status_code == 404:
+                raise LookupError("Client with such ID doesn't exist")
+            else:
+                return response.json()

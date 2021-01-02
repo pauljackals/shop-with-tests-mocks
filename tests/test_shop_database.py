@@ -48,6 +48,10 @@ class TestShopDatabase(unittest.TestCase):
         id_client = 1
         self.assertDictEqual(self.shop_database.client_get(id_client), self.database['clients'][id_client])
 
+    def test_client_get_wrong_type(self):
+        with self.assertRaisesRegex(TypeError, "^Client ID must an integer$"):
+            self.shop_database.client_get('1')
+
     def tearDown(self):
         self.shop_database = None
 

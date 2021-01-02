@@ -23,13 +23,17 @@ class TestShopDatabase(unittest.TestCase):
             ]
         }
 
-        def request_custom(method, url):
+        def get_new_id(key):
+            new_id = -1
+            for entity in self.database[key]:
+                if entity['id'] > new_id:
+                    new_id = entity['id']
+            return new_id + 1
+
+        def request_custom(method, url, data=None):
             url_split = url.split('/')
             endpoint = url_split[-2]
-            if url_split[-1] == '':
-                id_param = None
-            else:
-                id_param = int(url_split[-1])
+            id_param = None if url_split[-1] == '' else int(url_split[-1])
             if method == 'get':
                 if id_param is None:
                     return TestResponse(self.database[endpoint], 200)
@@ -38,7 +42,14 @@ class TestShopDatabase(unittest.TestCase):
                         if entity['id'] == id_param:
                             return TestResponse(entity, 200)
                     return TestResponse({}, 404)
+            elif method == 'post':
+                return TestResponse({
+                    'id': get_new_id(endpoint),
+                    **data
+                }, 201)
+
         self.api_url = 'http://example.com'
+        self.get_new_id = get_new_id
         self.shop_database = ShopDatabase(self.api_url)
         self.shop_database.request = Mock()
         self.shop_database.request.side_effect = request_custom
@@ -87,6 +98,17 @@ class TestShopDatabase(unittest.TestCase):
     def test_clients_get_mock_check(self):
         self.shop_database.client_get()
         self.shop_database.request.assert_called_once_with('get', self.api_url + '/clients/')
+
+    def test_client_post(self):
+        client_new = {
+            'name_first': 'Harry',
+            'name_last': 'Red',
+            'email': 'harry_red@example.com'
+        }
+        self.assertDictEqual(self.shop_database.client_post(**client_new), {
+            'id': self.get_new_id('clients'),
+            **client_new
+        })
 
     def tearDown(self):
         self.shop_database = None

@@ -32,7 +32,8 @@ class TestShopDatabase(unittest.TestCase):
                     if entity['id'] == id_param:
                         return TestResponse(entity, 200)
                 return TestResponse({}, 404)
-        self.shop_database = ShopDatabase('http://example.com')
+        self.api_url = 'http://example.com'
+        self.shop_database = ShopDatabase(self.api_url)
         self.shop_database.request = Mock()
         self.shop_database.request.side_effect = request_custom
 
@@ -63,6 +64,11 @@ class TestShopDatabase(unittest.TestCase):
         self.shop_database.request.side_effect = requests.ConnectionError
         with self.assertRaisesRegex(ConnectionError, "^Can't get client from database$"):
             self.shop_database.client_get(1)
+
+    def test_client_get_mock_check(self):
+        id_client = 0
+        self.shop_database.client_get(id_client)
+        self.shop_database.request.assert_called_once_with('get', self.api_url + '/clients/' + str(id_client))
 
     def tearDown(self):
         self.shop_database = None

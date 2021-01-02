@@ -34,8 +34,7 @@ class TestShopDatabase(unittest.TestCase):
         self.shop_database.request.side_effect = request_custom
 
     def test_init(self):
-        shop_database = ShopDatabase('http://example.com')
-        self.assertIsInstance(shop_database, ShopDatabase)
+        self.assertIsInstance(self.shop_database, ShopDatabase)
 
     def test_init_wrong_type(self):
         with self.assertRaisesRegex(TypeError, "^Api URL must be a valid url string$"):

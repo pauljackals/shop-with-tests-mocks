@@ -58,11 +58,11 @@ class TestShopDatabase(unittest.TestCase):
         self.assertIsInstance(self.shop_database, ShopDatabase)
 
     def test_init_wrong_type(self):
-        with self.assertRaisesRegex(TypeError, "^Api URL must be a valid url string$"):
+        with self.assertRaisesRegex(TypeError, "^Api URL must be a string$"):
             ShopDatabase(545)
 
     def test_init_invalid(self):
-        with self.assertRaisesRegex(TypeError, "^Api URL must be a valid url string$"):
+        with self.assertRaisesRegex(ValueError, "^Api URL must be a valid url$"):
             ShopDatabase('http://examplecom')
 
     def test_client_get(self):

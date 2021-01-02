@@ -165,6 +165,11 @@ class TestShopDatabase(unittest.TestCase):
         with self.assertRaisesRegex(ConnectionError, "^Can't delete client from database$"):
             self.shop_database.client_delete(1)
 
+    def test_client_delete_mock_check(self):
+        id_client = 0
+        self.shop_database.client_delete(id_client)
+        self.shop_database.request.assert_called_once_with('delete', self.api_url + '/clients/' + str(id_client))
+
     def tearDown(self):
         self.shop_database = None
         self.api_url = None

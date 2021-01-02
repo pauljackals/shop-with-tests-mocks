@@ -40,6 +40,9 @@ class ShopDatabase:
                     'name_last': name_last,
                     'email': email
                 })
-                return response.json()
+                if response.status_code == 409:
+                    raise ValueError("Can't post this client (email must be unique)")
+                else:
+                    return response.json()
             except requests.RequestException:
                 raise ConnectionError("Can't post client to database")

@@ -34,7 +34,7 @@ class TestShopDatabase(unittest.TestCase):
             url_split = url.split('/')
             endpoint = url_split[-2]
             id_param = None if url_split[-1] == '' else int(url_split[-1])
-            if method == 'get':
+            if method == 'get' or method == 'delete':
                 if id_param is None:
                     return TestResponse(self.database[endpoint], 200)
                 else:
@@ -147,6 +147,10 @@ class TestShopDatabase(unittest.TestCase):
         }
         self.shop_database.client_post(**client_new)
         self.shop_database.request.assert_called_once_with('post', self.api_url + '/clients/', data=client_new)
+
+    def test_client_delete(self):
+        id_client = 1
+        self.assertDictEqual(self.shop_database.client_delete(id_client), self.database['clients'][id_client])
 
     def tearDown(self):
         self.shop_database = None

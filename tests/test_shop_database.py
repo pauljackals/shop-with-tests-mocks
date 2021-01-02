@@ -130,14 +130,23 @@ class TestShopDatabase(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "^Email must be valid$"):
             self.shop_database.client_post('Harry', 'Red', 'harry_red@examplecom')
 
-    def test_clients_post_connection_error(self):
+    def test_client_post_connection_error(self):
         self.shop_database.request.side_effect = requests.ConnectionError
         with self.assertRaisesRegex(ConnectionError, "^Can't post client to database$"):
             self.shop_database.client_post('Harry', 'Red', 'harry_red@example.com')
 
-    def test_clients_post_non_unique_email(self):
+    def test_client_post_non_unique_email(self):
         with self.assertRaisesRegex(ValueError, "^Can't post this client \\(email must be unique\\)$"):
             self.shop_database.client_post('Harry', 'Red', 'jane_blue@example.com')
+
+    def test_client_post_mock_check(self):
+        client_new = {
+            'name_first': 'Harry',
+            'name_last': 'Red',
+            'email': 'harry_red@example.com'
+        }
+        self.shop_database.client_post(**client_new)
+        self.shop_database.request.assert_called_once_with('post', self.api_url + '/clients/', data=client_new)
 
     def tearDown(self):
         self.shop_database = None

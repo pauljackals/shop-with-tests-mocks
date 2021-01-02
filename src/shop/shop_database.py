@@ -22,3 +22,7 @@ class ShopDatabase:
                     return response.json()
             except requests.RequestException:
                 raise ConnectionError("Can't get client from database")
+
+    def clients_get(self):
+        response = self.request('get', self.api_url + '/clients/')
+        return response.json()

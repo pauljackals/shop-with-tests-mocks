@@ -122,6 +122,10 @@ class TestShopDatabase(unittest.TestCase):
         with self.assertRaisesRegex(TypeError, "^Names and email must be strings$"):
             self.shop_database.client_post('Harry', 'Red', 654)
 
+    def test_client_post_invalid_email(self):
+        with self.assertRaisesRegex(ValueError, "^Email must be valid$"):
+            self.shop_database.client_post('Harry', 'Red', 'harry_red@examplecom')
+
     def tearDown(self):
         self.shop_database = None
 

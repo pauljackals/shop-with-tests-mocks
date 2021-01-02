@@ -26,12 +26,18 @@ class TestShopDatabase(unittest.TestCase):
         def request_custom(method, url):
             url_split = url.split('/')
             endpoint = url_split[-2]
-            id_param = int(url_split[-1])
+            if url_split[-1] == '':
+                id_param = None
+            else:
+                id_param = int(url_split[-1])
             if method == 'get':
-                for entity in self.database[endpoint]:
-                    if entity['id'] == id_param:
-                        return TestResponse(entity, 200)
-                return TestResponse({}, 404)
+                if id_param is None:
+                    return TestResponse(self.database[endpoint], 200)
+                else:
+                    for entity in self.database[endpoint]:
+                        if entity['id'] == id_param:
+                            return TestResponse(entity, 200)
+                    return TestResponse({}, 404)
         self.api_url = 'http://example.com'
         self.shop_database = ShopDatabase(self.api_url)
         self.shop_database.request = Mock()

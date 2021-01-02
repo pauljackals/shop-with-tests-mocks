@@ -70,6 +70,9 @@ class TestShopDatabase(unittest.TestCase):
         self.shop_database.client_get(id_client)
         self.shop_database.request.assert_called_once_with('get', self.api_url + '/clients/' + str(id_client))
 
+    def test_clients_get(self):
+        self.assertListEqual(self.shop_database.clients_get(), self.database['clients'])
+
     def tearDown(self):
         self.shop_database = None
 

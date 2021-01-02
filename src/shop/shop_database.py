@@ -9,3 +9,7 @@ class ShopDatabase:
         else:
             self.api_url = api_url
             self.request = requests.request
+
+    def client_get(self, id_client):
+        response = self.request('get', self.api_url + '/clients/' + str(id_client))
+        return response.json()

@@ -128,6 +128,9 @@ class TestShopDatabase(unittest.TestCase):
 
     def tearDown(self):
         self.shop_database = None
+        self.api_url = None
+        self.get_new_id = None
+        self.shop_database = None
 
 
 class TestResponse:

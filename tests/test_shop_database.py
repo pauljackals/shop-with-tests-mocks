@@ -290,6 +290,10 @@ class TestShopDatabase(unittest.TestCase):
     def test_items_get(self):
         self.assertListEqual(self.shop_database.item_get(), self.database['items'])
 
+    def test_item_get(self):
+        item = self.database['items'][0]
+        self.assertDictEqual(self.shop_database.item_get(item['id']), item)
+
     def tearDown(self):
         self.shop_database = None
         self.api_url = None

@@ -51,15 +51,15 @@ class TestShopDatabase(unittest.TestCase):
                     'id': get_new_id(endpoint),
                     **data
                 }, 201)
-            elif method == 'put':
-                if endpoint == 'clients':
+            elif method == 'put' or method == 'patch':
+                if endpoint == 'clients' and 'email' in data:
                     for entity in self.database[endpoint]:
                         if entity['email'] == data['email'] and entity['id'] != id_param:
                             return TestResponse({}, 409)
                 for entity in self.database[endpoint]:
                     if entity['id'] == id_param:
                         return TestResponse({
-                            'id': entity['id'],
+                            **entity,
                             **data
                         }, 200)
                 return TestResponse({}, 404)
@@ -189,36 +189,36 @@ class TestShopDatabase(unittest.TestCase):
             'name_last': 'Red',
             'email': 'harry_red@example.com'
         }
-        self.assertDictEqual(self.shop_database.client_put(*client_updated.values()), client_updated)
+        self.assertDictEqual(self.shop_database.client_put_patch(*client_updated.values()), client_updated)
 
     def test_client_put_wrong_type_name(self):
         with self.assertRaisesRegex(TypeError, "^Names and email must be strings$"):
-            self.shop_database.client_put(1, 'Harry', 434, 'harry_red@example.com')
+            self.shop_database.client_put_patch(1, 'Harry', 434, 'harry_red@example.com')
 
     def test_client_put_empty_name(self):
         with self.assertRaisesRegex(ValueError, "^Both names must be non-empty$"):
-            self.shop_database.client_put(1, '', 'Red', 'harry_red@example.com')
+            self.shop_database.client_put_patch(1, '', 'Red', 'harry_red@example.com')
 
     def test_client_put_wrong_type_id(self):
         with self.assertRaisesRegex(TypeError, "^Client ID must be an integer$"):
-            self.shop_database.client_put('1', 'Harry', 'Red', 'harry_red@example.com')
+            self.shop_database.client_put_patch('1', 'Harry', 'Red', 'harry_red@example.com')
 
     def test_client_put_invalid_email(self):
         with self.assertRaisesRegex(ValueError, "^Email must be valid$"):
-            self.shop_database.client_put(1, 'Harry', 'Red', 'harry_red@examplecom')
+            self.shop_database.client_put_patch(1, 'Harry', 'Red', 'harry_red@examplecom')
 
     def test_client_put_missing(self):
         with self.assertRaisesRegex(LookupError, "^Client with such ID doesn't exist$"):
-            self.shop_database.client_put(999, 'Harry', 'Red', 'harry_red@example.com')
+            self.shop_database.client_put_patch(999, 'Harry', 'Red', 'harry_red@example.com')
 
     def test_client_put_connection_error(self):
         self.shop_database.request.side_effect = requests.ConnectionError
         with self.assertRaisesRegex(ConnectionError, "^Can't put client in database$"):
-            self.shop_database.client_put(1, 'Harry', 'Red', 'harry_red@example.com')
+            self.shop_database.client_put_patch(1, 'Harry', 'Red', 'harry_red@example.com')
 
     def test_client_put_non_unique_email(self):
         with self.assertRaisesRegex(ValueError, "^Can't put this client \\(email must be unique\\)$"):
-            self.shop_database.client_put(1, 'Harry', 'Red', 'john_rose@example.com')
+            self.shop_database.client_put_patch(1, 'Harry', 'Red', 'john_rose@example.com')
 
     def test_client_put_old_email(self):
         client_updated = {
@@ -227,7 +227,7 @@ class TestShopDatabase(unittest.TestCase):
             'name_last': 'Red',
             'email': 'jane_blue@example.com'
         }
-        self.assertDictEqual(self.shop_database.client_put(*client_updated.values()), client_updated)
+        self.assertDictEqual(self.shop_database.client_put_patch(*client_updated.values()), client_updated)
 
     def test_client_put_mock_check(self):
         client_updated_id = 1
@@ -236,8 +236,18 @@ class TestShopDatabase(unittest.TestCase):
             'name_last': 'Red',
             'email': 'harry_red@example.com'
         }
-        self.shop_database.client_put(client_updated_id, **client_updated)
+        self.shop_database.client_put_patch(client_updated_id, **client_updated)
         self.shop_database.request.assert_called_once_with('put', self.api_url + '/clients/' + str(client_updated_id), data=client_updated)
+
+    def test_client_patch(self):
+        client = self.database['clients'][0]
+        client_updated = {
+            'id': client['id'],
+            'name_first': client['name_first'],
+            'name_last': 'Yellow',
+            'email': client['email']
+        }
+        self.assertDictEqual(self.shop_database.client_put_patch(client_updated['id'], name_last=client_updated['name_last']), client_updated)
 
     def tearDown(self):
         self.shop_database = None

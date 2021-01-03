@@ -229,6 +229,16 @@ class TestShopDatabase(unittest.TestCase):
         }
         self.assertDictEqual(self.shop_database.client_put(*client_updated.values()), client_updated)
 
+    def test_client_put_mock_check(self):
+        client_updated_id = 1
+        client_updated = {
+            'name_first': 'Harry',
+            'name_last': 'Red',
+            'email': 'harry_red@example.com'
+        }
+        self.shop_database.client_put(client_updated_id, **client_updated)
+        self.shop_database.request.assert_called_once_with('put', self.api_url + '/clients/' + str(client_updated_id), data=client_updated)
+
     def tearDown(self):
         self.shop_database = None
         self.api_url = None

@@ -302,6 +302,11 @@ class TestShopDatabase(unittest.TestCase):
         with self.assertRaisesRegex(LookupError, "^Item with such ID doesn't exist$"):
             self.shop_database.item_get(999)
 
+    def test_items_get_connection_error(self):
+        self.shop_database.request.side_effect = requests.ConnectionError
+        with self.assertRaisesRegex(ConnectionError, "^Can't get items from database$"):
+            self.shop_database.item_get()
+
     def tearDown(self):
         self.shop_database = None
         self.api_url = None

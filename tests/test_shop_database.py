@@ -207,6 +207,11 @@ class TestShopDatabase(unittest.TestCase):
         with self.assertRaisesRegex(LookupError, "^Client with such ID doesn't exist$"):
             self.shop_database.client_put(999, 'Harry', 'Red', 'harry_red@example.com')
 
+    def test_client_put_connection_error(self):
+        self.shop_database.request.side_effect = requests.ConnectionError
+        with self.assertRaisesRegex(ConnectionError, "^Can't put client in database$"):
+            self.shop_database.client_put(1, 'Harry', 'Red', 'harry_red@example.com')
+
     def tearDown(self):
         self.shop_database = None
         self.api_url = None

@@ -159,3 +159,10 @@ class ShopDatabase:
 
     def item_delete(self, id_item):
         return self.__entity_delete(self.request, self.api_url, 'items', 'item', id_item)
+
+    def item_put_patch(self, id_item, name, value):
+        response = self.request('put', self.api_url + '/items/' + str(id_item), data={
+            'name': name,
+            'value': value
+        })
+        return response.json()

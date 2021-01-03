@@ -71,12 +71,15 @@ class ShopDatabase:
         elif self.__email_invalid(email):
             raise ValueError("Email must be valid")
         else:
-            response = self.request('put', self.api_url + '/clients/' + str(id_client), data={
-                'name_first': name_first,
-                'name_last': name_last,
-                'email': email
-            })
-            if response.status_code == 404:
-                raise LookupError("Client with such ID doesn't exist")
-            else:
-                return response.json()
+            try:
+                response = self.request('put', self.api_url + '/clients/' + str(id_client), data={
+                    'name_first': name_first,
+                    'name_last': name_last,
+                    'email': email
+                })
+                if response.status_code == 404:
+                    raise LookupError("Client with such ID doesn't exist")
+                else:
+                    return response.json()
+            except requests.RequestException:
+                raise ConnectionError("Can't put client in database")

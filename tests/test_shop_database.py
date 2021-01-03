@@ -402,6 +402,10 @@ class TestShopDatabase(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "^Name must not be empty$"):
             self.shop_database.item_put_patch(1, '', 2000.99)
 
+    def test_item_put_wrong_type_id(self):
+        with self.assertRaisesRegex(TypeError, "^Item ID must be an integer$"):
+            self.shop_database.item_put_patch('1', 'PlayStation 5', 2000.99)
+
     def tearDown(self):
         self.shop_database = None
         self.api_url = None

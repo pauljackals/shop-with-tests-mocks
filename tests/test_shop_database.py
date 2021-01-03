@@ -437,6 +437,14 @@ class TestShopDatabase(unittest.TestCase):
         }
         self.assertDictEqual(self.shop_database.item_put_patch(item_updated['id'], name=item_updated['name']), item_updated)
 
+    def test_item_patch_mock_check(self):
+        item_updated_id = 1
+        item_updated = {
+            'name': 'PlayStation 3'
+        }
+        self.shop_database.item_put_patch(item_updated_id, name=item_updated['name'])
+        self.shop_database.request.assert_called_once_with('patch', self.api_url + '/items/' + str(item_updated_id), data=item_updated)
+
     def tearDown(self):
         self.shop_database = None
         self.api_url = None

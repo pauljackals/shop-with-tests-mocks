@@ -398,6 +398,10 @@ class TestShopDatabase(unittest.TestCase):
         with self.assertRaisesRegex(TypeError, "^Name must be a string$"):
             self.shop_database.item_put_patch(1, 524, 2000.99)
 
+    def test_item_put_wrong_type_value(self):
+        with self.assertRaisesRegex(TypeError, "^Value must be a float$"):
+            self.shop_database.item_put_patch(1, 'PlayStation 5', 2000)
+
     def test_item_put_empty_name(self):
         with self.assertRaisesRegex(ValueError, "^Name must not be empty$"):
             self.shop_database.item_put_patch(1, '', 2000.99)

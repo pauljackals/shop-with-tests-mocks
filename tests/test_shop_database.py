@@ -372,6 +372,11 @@ class TestShopDatabase(unittest.TestCase):
         with self.assertRaisesRegex(LookupError, "^Item with such ID doesn't exist$"):
             self.shop_database.item_delete(999)
 
+    def test_item_delete_connection_error(self):
+        self.shop_database.request.side_effect = requests.ConnectionError
+        with self.assertRaisesRegex(ConnectionError, "^Can't delete item from database$"):
+            self.shop_database.item_delete(1)
+
     def tearDown(self):
         self.shop_database = None
         self.api_url = None

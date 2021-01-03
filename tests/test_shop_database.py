@@ -335,6 +335,10 @@ class TestShopDatabase(unittest.TestCase):
         with self.assertRaisesRegex(TypeError, "^Name must be a string$"):
             self.shop_database.item_post(434, 2199.99)
 
+    def test_item_post_wrong_type_value(self):
+        with self.assertRaisesRegex(TypeError, "^Value must be a float$"):
+            self.shop_database.item_post('PlayStation 5', 2199)
+
     def tearDown(self):
         self.shop_database = None
         self.api_url = None

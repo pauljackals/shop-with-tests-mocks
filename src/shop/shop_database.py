@@ -167,6 +167,8 @@ class ShopDatabase:
             raise TypeError("Name must be a string")
         elif name == '':
             raise ValueError("Name must not be empty")
+        elif value is not None and len(str(value).split('.')[1]) > 2:
+            raise ValueError("Value must have no more than 2 decimal places")
         else:
             response = self.request('put', self.api_url + '/items/' + str(id_item), data={
                 'name': name,

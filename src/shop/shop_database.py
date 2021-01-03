@@ -130,6 +130,8 @@ class ShopDatabase:
             raise TypeError("Value must be a float")
         elif name == '':
             raise ValueError("Name must not be empty")
+        elif len(str(value).split('.')[1]) > 2:
+            raise ValueError("Value must have no more than 2 decimal places")
         else:
             response = self.request('post', self.api_url + '/items/', data={
                 'name': name,

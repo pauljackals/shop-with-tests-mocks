@@ -360,6 +360,10 @@ class TestShopDatabase(unittest.TestCase):
         self.shop_database.item_post(**item_new)
         self.shop_database.request.assert_called_once_with('post', self.api_url + '/items/', data=item_new)
 
+    def test_item_delete(self):
+        item = self.database['items'][0]
+        self.assertDictEqual(self.shop_database.item_delete(item['id']), item)
+
     def tearDown(self):
         self.shop_database = None
         self.api_url = None

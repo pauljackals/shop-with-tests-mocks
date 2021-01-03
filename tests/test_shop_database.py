@@ -377,6 +377,11 @@ class TestShopDatabase(unittest.TestCase):
         with self.assertRaisesRegex(ConnectionError, "^Can't delete item from database$"):
             self.shop_database.item_delete(1)
 
+    def test_item_delete_mock_check(self):
+        id_item = 0
+        self.shop_database.item_delete(id_item)
+        self.shop_database.request.assert_called_once_with('delete', self.api_url + '/items/' + str(id_item))
+
     def tearDown(self):
         self.shop_database = None
         self.api_url = None

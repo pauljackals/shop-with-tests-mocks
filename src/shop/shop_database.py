@@ -160,7 +160,7 @@ class ShopDatabase:
     def item_delete(self, id_item):
         return self.__entity_delete(self.request, self.api_url, 'items', 'item', id_item)
 
-    def item_put_patch(self, id_item, name, value):
+    def item_put_patch(self, id_item, name=None, value=None):
         if type(id_item) != int:
             raise TypeError("Item ID must be an integer")
         elif name is not None and type(name) != str:
@@ -170,10 +170,11 @@ class ShopDatabase:
         elif value is not None and len(str(value).split('.')[1]) > 2:
             raise ValueError("Value must have no more than 2 decimal places")
         else:
+            method = 'patch' if None in [name, value] else 'put'
             try:
-                response = self.request('put', self.api_url + '/items/' + str(id_item), data={
-                    'name': name,
-                    'value': value
+                response = self.request(method, self.api_url + '/items/' + str(id_item), data={
+                    **({} if name is None else {'name': name}),
+                    **({} if value is None else {'value': value})
                 })
                 if response.status_code == 404:
                     raise LookupError("Item with such ID doesn't exist")

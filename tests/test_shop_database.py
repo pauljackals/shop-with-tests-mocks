@@ -203,6 +203,10 @@ class TestShopDatabase(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "^Email must be valid$"):
             self.shop_database.client_put(1, 'Harry', 'Red', 'harry_red@examplecom')
 
+    def test_client_put_missing(self):
+        with self.assertRaisesRegex(LookupError, "^Client with such ID doesn't exist$"):
+            self.shop_database.client_put(999, 'Harry', 'Red', 'harry_red@example.com')
+
     def tearDown(self):
         self.shop_database = None
         self.api_url = None

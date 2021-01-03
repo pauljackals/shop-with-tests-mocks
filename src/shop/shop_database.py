@@ -79,6 +79,8 @@ class ShopDatabase:
                 })
                 if response.status_code == 404:
                     raise LookupError("Client with such ID doesn't exist")
+                elif response.status_code == 409:
+                    raise ValueError("Can't put this client (email must be unique)")
                 else:
                     return response.json()
             except requests.RequestException:

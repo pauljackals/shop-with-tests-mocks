@@ -20,6 +20,23 @@ class TestShopDatabase(unittest.TestCase):
                     'name_last': 'Blue',
                     'email': 'jane_blue@example.com'
                 }
+            ],
+            'items': [
+                {
+                    'id': 0,
+                    'name': 'PlayStation 4 Slim',
+                    'value': 1288.00
+                },
+                {
+                    'id': 1,
+                    'name': 'Xbox One S',
+                    'value': 1049.99
+                },
+                {
+                    'id': 2,
+                    'name': 'Nintendo Switch',
+                    'value': 1479.00
+                }
             ]
         }
 
@@ -269,6 +286,9 @@ class TestShopDatabase(unittest.TestCase):
         self.shop_database.request.side_effect = requests.ConnectionError
         with self.assertRaisesRegex(ConnectionError, "^Can't patch client in database$"):
             self.shop_database.client_put_patch(1, email='harry_red@example.com')
+
+    def test_items_get(self):
+        self.assertListEqual(self.shop_database.item_get(), self.database['items'])
 
     def tearDown(self):
         self.shop_database = None

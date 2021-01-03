@@ -294,6 +294,10 @@ class TestShopDatabase(unittest.TestCase):
         item = self.database['items'][0]
         self.assertDictEqual(self.shop_database.item_get(item['id']), item)
 
+    def test_item_get_name_check(self):
+        item = self.database['items'][0]
+        self.assertEqual(self.shop_database.item_get(item['id'])['name'], item['name'])
+
     def test_item_get_wrong_type(self):
         with self.assertRaisesRegex(TypeError, "^Item ID must be an integer$"):
             self.shop_database.item_get('0')

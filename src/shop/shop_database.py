@@ -102,4 +102,5 @@ class ShopDatabase:
                 else:
                     return response.json()
             except requests.RequestException:
-                raise ConnectionError("Can't get items from database")
+                suffix = id_item is None and 's' or ''
+                raise ConnectionError("Can't get item" + suffix + " from database")

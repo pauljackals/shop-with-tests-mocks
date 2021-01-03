@@ -312,6 +312,10 @@ class TestShopDatabase(unittest.TestCase):
         with self.assertRaisesRegex(ConnectionError, "^Can't get item from database$"):
             self.shop_database.item_get(0)
 
+    def test_items_get_mock_check(self):
+        self.shop_database.item_get()
+        self.shop_database.request.assert_called_once_with('get', self.api_url + '/items/')
+
     def tearDown(self):
         self.shop_database = None
         self.api_url = None

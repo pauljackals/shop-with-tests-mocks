@@ -17,7 +17,7 @@ class ShopDatabase:
         return not re.match(r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)", email)
 
     @staticmethod
-    def __entity_get(request, api_url, endpoint, word, id_entity=None):
+    def __entity_get(request, api_url, endpoint, word, id_entity):
         if id_entity is not None and type(id_entity) != int:
             raise TypeError(word.capitalize() + " ID must be an integer")
         else:
@@ -30,6 +30,20 @@ class ShopDatabase:
             except requests.RequestException:
                 suffix = id_entity is None and 's' or ''
                 raise ConnectionError("Can't get " + word + suffix + " from database")
+
+    @staticmethod
+    def __entity_delete(request, api_url, endpoint, word, id_entity):
+        if type(id_entity) != int:
+            raise TypeError(word.capitalize() + " ID must be an integer")
+        else:
+            try:
+                response = request('delete', api_url + '/' + endpoint + '/' + str(id_entity))
+                if response.status_code == 404:
+                    raise LookupError(word.capitalize() + " with such ID doesn't exist")
+                else:
+                    return response.json()
+            except requests.RequestException:
+                raise ConnectionError("Can't delete " + word + " from database")
 
     def client_get(self, id_client=None):
         return self.__entity_get(self.request, self.api_url, 'clients', 'client', id_client)
@@ -68,17 +82,18 @@ class ShopDatabase:
                 raise ConnectionError("Can't post client to database")
 
     def client_delete(self, id_client):
-        if type(id_client) != int:
-            raise TypeError("Client ID must be an integer")
-        else:
-            try:
-                response = self.request('delete', self.api_url + '/clients/' + str(id_client))
-                if response.status_code == 404:
-                    raise LookupError("Client with such ID doesn't exist")
-                else:
-                    return response.json()
-            except requests.RequestException:
-                raise ConnectionError("Can't delete client from database")
+        return self.__entity_delete(self.request, self.api_url, 'clients', 'client', id_client)
+        # if type(id_client) != int:
+        #     raise TypeError("Client ID must be an integer")
+        # else:
+        #     try:
+        #         response = self.request('delete', self.api_url + '/clients/' + str(id_client))
+        #         if response.status_code == 404:
+        #             raise LookupError("Client with such ID doesn't exist")
+        #         else:
+        #             return response.json()
+        #     except requests.RequestException:
+        #         raise ConnectionError("Can't delete client from database")
 
     def client_put_patch(self, id_client, name_first=None, name_last=None, email=None):
         if name_first == name_last == email is None:

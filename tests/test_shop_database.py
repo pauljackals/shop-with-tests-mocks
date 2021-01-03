@@ -398,6 +398,10 @@ class TestShopDatabase(unittest.TestCase):
         with self.assertRaisesRegex(TypeError, "^Name must be a string$"):
             self.shop_database.item_put_patch(1, 524, 2000.99)
 
+    def test_item_put_empty_name(self):
+        with self.assertRaisesRegex(ValueError, "^Name must not be empty$"):
+            self.shop_database.item_put_patch(1, '', 2000.99)
+
     def tearDown(self):
         self.shop_database = None
         self.api_url = None

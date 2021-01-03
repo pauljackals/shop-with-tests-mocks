@@ -75,8 +75,9 @@ class ShopDatabase:
         elif email is not None and self.__email_invalid(email):
             raise ValueError("Email must be valid")
         else:
+            method = 'patch' if None in [name_first, name_last, email] else 'put'
             try:
-                response = self.request(('patch' if None in [name_first, name_last, email] else 'put'), self.api_url + '/clients/' + str(id_client), data={
+                response = self.request(method, self.api_url + '/clients/' + str(id_client), data={
                     **({} if name_first is None else {'name_first': name_first}),
                     **({} if name_last is None else {'name_last': name_last}),
                     **({} if email is None else {'email': email})
@@ -84,8 +85,8 @@ class ShopDatabase:
                 if response.status_code == 404:
                     raise LookupError("Client with such ID doesn't exist")
                 elif response.status_code == 409:
-                    raise ValueError("Can't put this client (email must be unique)")
+                    raise ValueError("Can't " + method + " this client (email must be unique)")
                 else:
                     return response.json()
             except requests.RequestException:
-                raise ConnectionError("Can't put client in database")
+                raise ConnectionError("Can't " + method + " client in database")

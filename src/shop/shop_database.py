@@ -161,7 +161,9 @@ class ShopDatabase:
         return self.__entity_delete(self.request, self.api_url, 'items', 'item', id_item)
 
     def item_put_patch(self, id_item, name=None, value=None):
-        if type(id_item) != int:
+        if name == value is None:
+            raise AttributeError("Patch must have at least one attribute")
+        elif type(id_item) != int:
             raise TypeError("Item ID must be an integer")
         elif name is not None and type(name) != str:
             raise TypeError("Name must be a string")

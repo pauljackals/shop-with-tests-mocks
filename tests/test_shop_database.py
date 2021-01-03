@@ -352,6 +352,14 @@ class TestShopDatabase(unittest.TestCase):
         with self.assertRaisesRegex(ConnectionError, "^Can't post item to database$"):
             self.shop_database.item_post('PlayStation 5', 2199.99)
 
+    def test_item_post_mock_check(self):
+        item_new = {
+            'name': 'PlayStation 5',
+            'value': 2199.99,
+        }
+        self.shop_database.item_post(**item_new)
+        self.shop_database.request.assert_called_once_with('post', self.api_url + '/items/', data=item_new)
+
     def tearDown(self):
         self.shop_database = None
         self.api_url = None

@@ -76,4 +76,7 @@ class ShopDatabase:
                 'name_last': name_last,
                 'email': email
             })
-            return response.json()
+            if response.status_code == 404:
+                raise LookupError("Client with such ID doesn't exist")
+            else:
+                return response.json()

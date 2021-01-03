@@ -126,6 +126,8 @@ class ShopDatabase:
     def item_post(self, name, value):
         if type(name) != str:
             raise TypeError("Name must be a string")
+        elif type(value) != float:
+            raise TypeError("Value must be a float")
         else:
             response = self.request('post', self.api_url + '/items/', data={
                 'name': name,

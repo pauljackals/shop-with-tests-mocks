@@ -161,7 +161,9 @@ class ShopDatabase:
         return self.__entity_delete(self.request, self.api_url, 'items', 'item', id_item)
 
     def item_put_patch(self, id_item, name, value):
-        if name is not None and type(name) != str:
+        if type(id_item) != int:
+            raise TypeError("Item ID must be an integer")
+        elif name is not None and type(name) != str:
             raise TypeError("Name must be a string")
         elif name == '':
             raise ValueError("Name must not be empty")

@@ -406,6 +406,10 @@ class TestShopDatabase(unittest.TestCase):
         with self.assertRaisesRegex(TypeError, "^Item ID must be an integer$"):
             self.shop_database.item_put_patch('1', 'PlayStation 5', 2000.99)
 
+    def test_item_put_more_than_2_decimal(self):
+        with self.assertRaisesRegex(ValueError, "^Value must have no more than 2 decimal places$"):
+            self.shop_database.item_put_patch(1, 'PlayStation 5', 2000.995)
+
     def tearDown(self):
         self.shop_database = None
         self.api_url = None

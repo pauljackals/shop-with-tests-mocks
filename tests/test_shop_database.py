@@ -414,6 +414,11 @@ class TestShopDatabase(unittest.TestCase):
         with self.assertRaisesRegex(LookupError, "^Item with such ID doesn't exist$"):
             self.shop_database.item_put_patch(999, 'PlayStation 5', 2000.99)
 
+    def test_item_put_connection_error(self):
+        self.shop_database.request.side_effect = requests.ConnectionError
+        with self.assertRaisesRegex(ConnectionError, "^Can't put item in database$"):
+            self.shop_database.item_put_patch(1, 'PlayStation 5', 2000.99)
+
     def tearDown(self):
         self.shop_database = None
         self.api_url = None

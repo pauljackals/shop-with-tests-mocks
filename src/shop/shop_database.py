@@ -95,8 +95,11 @@ class ShopDatabase:
         if id_item is not None and type(id_item) != int:
             raise TypeError("Item ID must be an integer")
         else:
-            response = self.request('get', self.api_url + '/items/' + ('' if id_item is None else str(id_item)))
-            if response.status_code == 404:
-                raise LookupError("Item with such ID doesn't exist")
-            else:
-                return response.json()
+            try:
+                response = self.request('get', self.api_url + '/items/' + ('' if id_item is None else str(id_item)))
+                if response.status_code == 404:
+                    raise LookupError("Item with such ID doesn't exist")
+                else:
+                    return response.json()
+            except requests.RequestException:
+                raise ConnectionError("Can't get items from database")

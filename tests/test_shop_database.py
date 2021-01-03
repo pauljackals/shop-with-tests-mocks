@@ -321,6 +321,16 @@ class TestShopDatabase(unittest.TestCase):
         self.shop_database.item_get(id_item)
         self.shop_database.request.assert_called_once_with('get', self.api_url + '/items/' + str(id_item))
 
+    def test_item_post(self):
+        item_new = {
+            'name': 'PlayStation 5',
+            'value': 2199.99
+        }
+        self.assertDictEqual(self.shop_database.item_post(**item_new), {
+            'id': self.get_new_id('items'),
+            **item_new
+        })
+
     def tearDown(self):
         self.shop_database = None
         self.api_url = None

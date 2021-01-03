@@ -92,5 +92,8 @@ class ShopDatabase:
                 raise ConnectionError("Can't " + method + " client in database")
 
     def item_get(self, id_item=None):
-        response = self.request('get', self.api_url + '/items/' + ('' if id_item is None else str(id_item)))
-        return response.json()
+        if id_item is not None and type(id_item) != int:
+            raise TypeError("Item ID must be an integer")
+        else:
+            response = self.request('get', self.api_url + '/items/' + ('' if id_item is None else str(id_item)))
+            return response.json()

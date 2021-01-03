@@ -257,6 +257,10 @@ class TestShopDatabase(unittest.TestCase):
         self.shop_database.client_put_patch(client_updated_id, name_last=client_updated['name_last'])
         self.shop_database.request.assert_called_once_with('patch', self.api_url + '/clients/' + str(client_updated_id), data=client_updated)
 
+    def test_client_patch_no_arguments(self):
+        with self.assertRaisesRegex(AttributeError, "^Patch must have at least one attribute$"):
+            self.shop_database.client_put_patch(1)
+
     def tearDown(self):
         self.shop_database = None
         self.api_url = None

@@ -386,6 +386,14 @@ class TestShopDatabase(unittest.TestCase):
         self.shop_database.item_delete(id_item)
         self.shop_database.request.assert_called_once_with('delete', self.api_url + '/items/' + str(id_item))
 
+    def test_item_put(self):
+        item_updated = {
+            'id': 1,
+            'name': 'PlayStation 5',
+            'value': 2000.99
+        }
+        self.assertDictEqual(self.shop_database.item_put_patch(*item_updated.values()), item_updated)
+
     def tearDown(self):
         self.shop_database = None
         self.api_url = None

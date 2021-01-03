@@ -212,6 +212,10 @@ class TestShopDatabase(unittest.TestCase):
         with self.assertRaisesRegex(ConnectionError, "^Can't put client in database$"):
             self.shop_database.client_put(1, 'Harry', 'Red', 'harry_red@example.com')
 
+    def test_client_put_non_unique_email(self):
+        with self.assertRaisesRegex(ValueError, "^Can't put this client \\(email must be unique\\)$"):
+            self.shop_database.client_put(1, 'Harry', 'Red', 'john_rose@example.com')
+
     def tearDown(self):
         self.shop_database = None
         self.api_url = None

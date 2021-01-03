@@ -156,3 +156,6 @@ class ShopDatabase:
                 return response.json()
             except requests.RequestException:
                 raise ConnectionError("Can't post item to database")
+
+    def item_delete(self, id_item):
+        return self.__entity_delete(self.request, self.api_url, 'items', 'item', id_item)

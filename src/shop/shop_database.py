@@ -68,6 +68,8 @@ class ShopDatabase:
             raise TypeError("Client ID must be an integer")
         elif type(name_first) != str or type(name_last) != str or type(email) != str:
             raise TypeError("Names and email must be strings")
+        elif name_first == '' or name_last == '':
+            raise ValueError("Both names must be non-empty")
         elif self.__email_invalid(email):
             raise ValueError("Email must be valid")
         else:

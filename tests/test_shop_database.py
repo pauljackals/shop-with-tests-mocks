@@ -394,6 +394,10 @@ class TestShopDatabase(unittest.TestCase):
         }
         self.assertDictEqual(self.shop_database.item_put_patch(*item_updated.values()), item_updated)
 
+    def test_item_put_wrong_type_name(self):
+        with self.assertRaisesRegex(TypeError, "^Name must be a string$"):
+            self.shop_database.item_put_patch(1, 524, 2000.99)
+
     def tearDown(self):
         self.shop_database = None
         self.api_url = None

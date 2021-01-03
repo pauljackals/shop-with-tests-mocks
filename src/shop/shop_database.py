@@ -61,9 +61,12 @@ class ShopDatabase:
                 raise ConnectionError("Can't delete client from database")
 
     def client_put(self, id_client, name_first, name_last, email):
-        response = self.request('put', self.api_url + '/clients/' + str(id_client), data={
-            'name_first': name_first,
-            'name_last': name_last,
-            'email': email
-        })
-        return response.json()
+        if type(name_first) != str or type(name_last) != str or type(email) != str:
+            raise TypeError("Names and email must be strings")
+        else:
+            response = self.request('put', self.api_url + '/clients/' + str(id_client), data={
+                'name_first': name_first,
+                'name_last': name_last,
+                'email': email
+            })
+            return response.json()

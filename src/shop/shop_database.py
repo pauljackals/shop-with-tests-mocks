@@ -15,19 +15,34 @@ class ShopDatabase:
     def __email_invalid(self, email):
         return not re.match(r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)", email)
 
-    def client_get(self, id_client=None):
-        if id_client is not None and type(id_client) != int:
-            raise TypeError("Client ID must be an integer")
+    def __entity_get(self, endpoint, word, id_entity=None):
+        if id_entity is not None and type(id_entity) != int:
+            raise TypeError(word.capitalize() + " ID must be an integer")
         else:
             try:
-                response = self.request('get', self.api_url + '/clients/' + ('' if id_client is None else str(id_client)))
+                response = self.request('get', self.api_url + '/' + endpoint + '/' + ('' if id_entity is None else str(id_entity)))
                 if response.status_code == 404:
-                    raise LookupError("Client with such ID doesn't exist")
+                    raise LookupError(word.capitalize() + " with such ID doesn't exist")
                 else:
                     return response.json()
             except requests.RequestException:
-                suffix = id_client is None and 's' or ''
-                raise ConnectionError("Can't get client" + suffix + " from database")
+                suffix = id_entity is None and 's' or ''
+                raise ConnectionError("Can't get " + word + suffix + " from database")
+
+    def client_get(self, id_client=None):
+        return self.__entity_get('clients', 'client', id_client)
+        # if id_client is not None and type(id_client) != int:
+        #     raise TypeError("Client ID must be an integer")
+        # else:
+        #     try:
+        #         response = self.request('get', self.api_url + '/clients/' + ('' if id_client is None else str(id_client)))
+        #         if response.status_code == 404:
+        #             raise LookupError("Client with such ID doesn't exist")
+        #         else:
+        #             return response.json()
+        #     except requests.RequestException:
+        #         suffix = id_client is None and 's' or ''
+        #         raise ConnectionError("Can't get client" + suffix + " from database")
 
     def client_post(self, name_first, name_last, email):
         if type(name_first) != str or type(name_last) != str or type(email) != str:
@@ -92,15 +107,16 @@ class ShopDatabase:
                 raise ConnectionError("Can't " + method + " client in database")
 
     def item_get(self, id_item=None):
-        if id_item is not None and type(id_item) != int:
-            raise TypeError("Item ID must be an integer")
-        else:
-            try:
-                response = self.request('get', self.api_url + '/items/' + ('' if id_item is None else str(id_item)))
-                if response.status_code == 404:
-                    raise LookupError("Item with such ID doesn't exist")
-                else:
-                    return response.json()
-            except requests.RequestException:
-                suffix = id_item is None and 's' or ''
-                raise ConnectionError("Can't get item" + suffix + " from database")
+        return self.__entity_get('items', 'item', id_item)
+        # if id_item is not None and type(id_item) != int:
+        #     raise TypeError("Item ID must be an integer")
+        # else:
+        #     try:
+        #         response = self.request('get', self.api_url + '/items/' + ('' if id_item is None else str(id_item)))
+        #         if response.status_code == 404:
+        #             raise LookupError("Item with such ID doesn't exist")
+        #         else:
+        #             return response.json()
+        #     except requests.RequestException:
+        #         suffix = id_item is None and 's' or ''
+        #         raise ConnectionError("Can't get item" + suffix + " from database")

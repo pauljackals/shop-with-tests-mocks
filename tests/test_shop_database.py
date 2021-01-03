@@ -265,6 +265,11 @@ class TestShopDatabase(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "^Can't patch this client \\(email must be unique\\)$"):
             self.shop_database.client_put_patch(1, email='john_rose@example.com')
 
+    def test_client_patch_connection_error(self):
+        self.shop_database.request.side_effect = requests.ConnectionError
+        with self.assertRaisesRegex(ConnectionError, "^Can't patch client in database$"):
+            self.shop_database.client_put_patch(1, email='harry_red@example.com')
+
     def tearDown(self):
         self.shop_database = None
         self.api_url = None

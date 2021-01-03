@@ -161,8 +161,11 @@ class ShopDatabase:
         return self.__entity_delete(self.request, self.api_url, 'items', 'item', id_item)
 
     def item_put_patch(self, id_item, name, value):
-        response = self.request('put', self.api_url + '/items/' + str(id_item), data={
-            'name': name,
-            'value': value
-        })
-        return response.json()
+        if name is not None and type(name) != str:
+            raise TypeError("Name must be a string")
+        else:
+            response = self.request('put', self.api_url + '/items/' + str(id_item), data={
+                'name': name,
+                'value': value
+            })
+            return response.json()

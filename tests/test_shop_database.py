@@ -368,6 +368,10 @@ class TestShopDatabase(unittest.TestCase):
         with self.assertRaisesRegex(TypeError, "^Item ID must be an integer$"):
             self.shop_database.item_delete('1')
 
+    def test_item_delete_missing(self):
+        with self.assertRaisesRegex(LookupError, "^Item with such ID doesn't exist$"):
+            self.shop_database.item_delete(999)
+
     def tearDown(self):
         self.shop_database = None
         self.api_url = None

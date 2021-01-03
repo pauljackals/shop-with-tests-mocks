@@ -174,4 +174,7 @@ class ShopDatabase:
                 'name': name,
                 'value': value
             })
-            return response.json()
+            if response.status_code == 404:
+                raise LookupError("Item with such ID doesn't exist")
+            else:
+                return response.json()

@@ -163,6 +163,8 @@ class ShopDatabase:
     def item_put_patch(self, id_item, name, value):
         if name is not None and type(name) != str:
             raise TypeError("Name must be a string")
+        elif name == '':
+            raise ValueError("Name must not be empty")
         else:
             response = self.request('put', self.api_url + '/items/' + str(id_item), data={
                 'name': name,

@@ -183,4 +183,4 @@ class ShopDatabase:
                 else:
                     return response.json()
             except requests.RequestException:
-                raise ConnectionError("Can't put item in database")
+                raise ConnectionError("Can't " + method + " item in database")

@@ -12,6 +12,9 @@ class ShopDatabase:
             self.api_url = api_url
             self.request = requests.request
 
+    def __email_invalid(self, email):
+        return not re.match(r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)", email)
+
     def client_get(self, id_client=None):
         if id_client is not None and type(id_client) != int:
             raise TypeError("Client ID must be an integer")
@@ -31,7 +34,7 @@ class ShopDatabase:
             raise TypeError("Names and email must be strings")
         elif name_first == '' or name_last == '':
             raise ValueError("Both names must be non-empty")
-        elif not re.match(r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)", email):
+        elif self.__email_invalid(email):
             raise ValueError("Email must be valid")
         else:
             try:
@@ -65,6 +68,8 @@ class ShopDatabase:
             raise TypeError("Client ID must be an integer")
         elif type(name_first) != str or type(name_last) != str or type(email) != str:
             raise TypeError("Names and email must be strings")
+        elif self.__email_invalid(email):
+            raise ValueError("Email must be valid")
         else:
             response = self.request('put', self.api_url + '/clients/' + str(id_client), data={
                 'name_first': name_first,

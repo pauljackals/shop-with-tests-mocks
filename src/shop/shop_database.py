@@ -96,4 +96,7 @@ class ShopDatabase:
             raise TypeError("Item ID must be an integer")
         else:
             response = self.request('get', self.api_url + '/items/' + ('' if id_item is None else str(id_item)))
-            return response.json()
+            if response.status_code == 404:
+                raise LookupError("Item with such ID doesn't exist")
+            else:
+                return response.json()

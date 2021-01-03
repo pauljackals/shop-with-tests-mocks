@@ -63,21 +63,21 @@ class ShopDatabase:
             except requests.RequestException:
                 raise ConnectionError("Can't delete client from database")
 
-    def client_put(self, id_client, name_first, name_last, email):
+    def client_put_patch(self, id_client, name_first=None, name_last=None, email=None):
         if type(id_client) != int:
             raise TypeError("Client ID must be an integer")
-        elif type(name_first) != str or type(name_last) != str or type(email) != str:
+        elif (name_first is not None and type(name_first) != str) or (name_last is not None and type(name_last) != str) or (email is not None and type(email) != str):
             raise TypeError("Names and email must be strings")
-        elif name_first == '' or name_last == '':
+        elif (name_first is not None and name_first == '') or (name_last is not None and name_last == ''):
             raise ValueError("Both names must be non-empty")
-        elif self.__email_invalid(email):
+        elif email is not None and self.__email_invalid(email):
             raise ValueError("Email must be valid")
         else:
             try:
-                response = self.request('put', self.api_url + '/clients/' + str(id_client), data={
-                    'name_first': name_first,
-                    'name_last': name_last,
-                    'email': email
+                response = self.request(('patch' if None in [name_first, name_last, email] else 'put'), self.api_url + '/clients/' + str(id_client), data={
+                    **({} if name_first is None else {'name_first': name_first}),
+                    **({} if name_last is None else {'name_last': name_last}),
+                    **({} if email is None else {'email': email})
                 })
                 if response.status_code == 404:
                     raise LookupError("Client with such ID doesn't exist")

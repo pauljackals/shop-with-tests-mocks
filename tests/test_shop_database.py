@@ -261,6 +261,10 @@ class TestShopDatabase(unittest.TestCase):
         with self.assertRaisesRegex(AttributeError, "^Patch must have at least one attribute$"):
             self.shop_database.client_put_patch(1)
 
+    def test_client_patch_non_unique_email(self):
+        with self.assertRaisesRegex(ValueError, "^Can't patch this client \\(email must be unique\\)$"):
+            self.shop_database.client_put_patch(1, email='john_rose@example.com')
+
     def tearDown(self):
         self.shop_database = None
         self.api_url = None

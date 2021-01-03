@@ -347,6 +347,11 @@ class TestShopDatabase(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "^Value must have no more than 2 decimal places$"):
             self.shop_database.item_post('PlayStation 5', 2199.993)
 
+    def test_item_post_connection_error(self):
+        self.shop_database.request.side_effect = requests.ConnectionError
+        with self.assertRaisesRegex(ConnectionError, "^Can't post item to database$"):
+            self.shop_database.item_post('PlayStation 5', 2199.99)
+
     def tearDown(self):
         self.shop_database = None
         self.api_url = None

@@ -195,6 +195,10 @@ class TestShopDatabase(unittest.TestCase):
         with self.assertRaisesRegex(TypeError, "^Names and email must be strings$"):
             self.shop_database.client_put(1, 'Harry', 434, 'harry_red@example.com')
 
+    def test_client_put_empty_name(self):
+        with self.assertRaisesRegex(ValueError, "^Both names must be non-empty$"):
+            self.shop_database.client_put(1, '', 'Red', 'harry_red@example.com')
+
     def test_client_put_wrong_type_id(self):
         with self.assertRaisesRegex(TypeError, "^Client ID must be an integer$"):
             self.shop_database.client_put('1', 'Harry', 'Red', 'harry_red@example.com')

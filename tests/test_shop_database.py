@@ -51,6 +51,18 @@ class TestShopDatabase(unittest.TestCase):
                     'id': get_new_id(endpoint),
                     **data
                 }, 201)
+            elif method == 'put':
+                if endpoint == 'clients':
+                    for entity in self.database[endpoint]:
+                        if entity['email'] == data['email'] and entity['id'] != id_param:
+                            return TestResponse({}, 409)
+                for entity in self.database[endpoint]:
+                    if entity['id'] == id_param:
+                        return TestResponse({
+                            'id': entity['id'],
+                            **data
+                        }, 200)
+                return TestResponse({}, 404)
 
         self.api_url = 'http://example.com'
         self.get_new_id = get_new_id
@@ -169,6 +181,15 @@ class TestShopDatabase(unittest.TestCase):
         id_client = 0
         self.shop_database.client_delete(id_client)
         self.shop_database.request.assert_called_once_with('delete', self.api_url + '/clients/' + str(id_client))
+
+    def test_client_put(self):
+        client_updated = {
+            'id': 1,
+            'name_first': 'Harry',
+            'name_last': 'Red',
+            'email': 'harry_red@example.com'
+        }
+        self.assertDictEqual(self.shop_database.client_put(*client_updated.values()), client_updated)
 
     def tearDown(self):
         self.shop_database = None

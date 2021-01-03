@@ -419,6 +419,15 @@ class TestShopDatabase(unittest.TestCase):
         with self.assertRaisesRegex(ConnectionError, "^Can't put item in database$"):
             self.shop_database.item_put_patch(1, 'PlayStation 5', 2000.99)
 
+    def test_item_put_mock_check(self):
+        item_updated_id = 1
+        item_updated = {
+            'name': 'PlayStation 5',
+            'value': 2000.99
+        }
+        self.shop_database.item_put_patch(item_updated_id, **item_updated)
+        self.shop_database.request.assert_called_once_with('put', self.api_url + '/items/' + str(item_updated_id), data=item_updated)
+
     def tearDown(self):
         self.shop_database = None
         self.api_url = None

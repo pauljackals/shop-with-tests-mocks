@@ -216,6 +216,15 @@ class TestShopDatabase(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "^Can't put this client \\(email must be unique\\)$"):
             self.shop_database.client_put(1, 'Harry', 'Red', 'john_rose@example.com')
 
+    def test_client_put_old_email(self):
+        client_updated = {
+            'id': 1,
+            'name_first': 'Harry',
+            'name_last': 'Red',
+            'email': 'jane_blue@example.com'
+        }
+        self.assertDictEqual(self.shop_database.client_put(*client_updated.values()), client_updated)
+
     def tearDown(self):
         self.shop_database = None
         self.api_url = None

@@ -12,15 +12,17 @@ class ShopDatabase:
             self.api_url = api_url
             self.request = requests.request
 
-    def __email_invalid(self, email):
+    @staticmethod
+    def __email_invalid(email):
         return not re.match(r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)", email)
 
-    def __entity_get(self, endpoint, word, id_entity=None):
+    @staticmethod
+    def __entity_get(request, api_url, endpoint, word, id_entity=None):
         if id_entity is not None and type(id_entity) != int:
             raise TypeError(word.capitalize() + " ID must be an integer")
         else:
             try:
-                response = self.request('get', self.api_url + '/' + endpoint + '/' + ('' if id_entity is None else str(id_entity)))
+                response = request('get', api_url + '/' + endpoint + '/' + ('' if id_entity is None else str(id_entity)))
                 if response.status_code == 404:
                     raise LookupError(word.capitalize() + " with such ID doesn't exist")
                 else:
@@ -30,7 +32,7 @@ class ShopDatabase:
                 raise ConnectionError("Can't get " + word + suffix + " from database")
 
     def client_get(self, id_client=None):
-        return self.__entity_get('clients', 'client', id_client)
+        return self.__entity_get(self.request, self.api_url, 'clients', 'client', id_client)
         # if id_client is not None and type(id_client) != int:
         #     raise TypeError("Client ID must be an integer")
         # else:
@@ -107,7 +109,7 @@ class ShopDatabase:
                 raise ConnectionError("Can't " + method + " client in database")
 
     def item_get(self, id_item=None):
-        return self.__entity_get('items', 'item', id_item)
+        return self.__entity_get(self.request, self.api_url, 'items', 'item', id_item)
         # if id_item is not None and type(id_item) != int:
         #     raise TypeError("Item ID must be an integer")
         # else:

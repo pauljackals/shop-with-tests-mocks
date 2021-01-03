@@ -167,6 +167,8 @@ class ShopDatabase:
             raise TypeError("Item ID must be an integer")
         elif name is not None and type(name) != str:
             raise TypeError("Name must be a string")
+        elif value is not None and type(value) != float:
+            raise TypeError("Value must be a float")
         elif name == '':
             raise ValueError("Name must not be empty")
         elif value is not None and len(str(value).split('.')[1]) > 2:

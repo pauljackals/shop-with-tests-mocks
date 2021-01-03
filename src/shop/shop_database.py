@@ -124,8 +124,11 @@ class ShopDatabase:
         #         raise ConnectionError("Can't get item" + suffix + " from database")
 
     def item_post(self, name, value):
-        response = self.request('post', self.api_url + '/items/', data={
-            'name': name,
-            'value': value
-        })
-        return response.json()
+        if type(name) != str:
+            raise TypeError("Name must be a string")
+        else:
+            response = self.request('post', self.api_url + '/items/', data={
+                'name': name,
+                'value': value
+            })
+            return response.json()

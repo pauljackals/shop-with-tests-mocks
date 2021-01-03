@@ -449,6 +449,11 @@ class TestShopDatabase(unittest.TestCase):
         with self.assertRaisesRegex(AttributeError, "^Patch must have at least one attribute$"):
             self.shop_database.item_put_patch(1)
 
+    def test_item_patch_connection_error(self):
+        self.shop_database.request.side_effect = requests.ConnectionError
+        with self.assertRaisesRegex(ConnectionError, "^Can't patch item in database$"):
+            self.shop_database.item_put_patch(1, name='PlayStation 3')
+
     def tearDown(self):
         self.shop_database = None
         self.api_url = None

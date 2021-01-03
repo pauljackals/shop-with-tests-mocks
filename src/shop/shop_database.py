@@ -64,7 +64,9 @@ class ShopDatabase:
                 raise ConnectionError("Can't delete client from database")
 
     def client_put_patch(self, id_client, name_first=None, name_last=None, email=None):
-        if type(id_client) != int:
+        if name_first == name_last == email is None:
+            raise AttributeError("Patch must have at least one attribute")
+        elif type(id_client) != int:
             raise TypeError("Client ID must be an integer")
         elif (name_first is not None and type(name_first) != str) or (name_last is not None and type(name_last) != str) or (email is not None and type(email) != str):
             raise TypeError("Names and email must be strings")

@@ -605,6 +605,10 @@ class TestShopDatabase(unittest.TestCase):
         }
         self.assertDictEqual(self.shop_database.order_delete(order['id']), order)
 
+    def test_order_delete_wrong_type(self):
+        with self.assertRaisesRegex(TypeError, "^Order ID must be an integer$"):
+            self.shop_database.order_delete('0')
+
     def tearDown(self):
         self.shop_database = None
         self.api_url = None

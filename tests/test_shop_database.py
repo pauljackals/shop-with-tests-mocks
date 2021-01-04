@@ -534,6 +534,10 @@ class TestShopDatabase(unittest.TestCase):
         with self.assertRaisesRegex(ConnectionError, "^Can't post order to database$"):
             self.shop_database.order_post(1, [0, 2])
 
+    def test_order_post_missing_client(self):
+        with self.assertRaisesRegex(LookupError, "^Referenced entities don't exist$"):
+            self.shop_database.order_post(999, [0, 2])
+
     def tearDown(self):
         self.shop_database = None
         self.api_url = None

@@ -574,6 +574,10 @@ class TestShopDatabase(unittest.TestCase):
         with self.assertRaisesRegex(TypeError, "^Order ID must be an integer$"):
             self.shop_database.order_get('0')
 
+    def test_order_get_missing(self):
+        with self.assertRaisesRegex(LookupError, "^Order with such ID doesn't exist$"):
+            self.shop_database.order_get(999)
+
     def tearDown(self):
         self.shop_database = None
         self.api_url = None

@@ -618,6 +618,11 @@ class TestShopDatabase(unittest.TestCase):
         with self.assertRaisesRegex(ConnectionError, "^Can't delete order from database$"):
             self.shop_database.order_delete(0)
 
+    def test_order_delete_mock_check(self):
+        id_order = 0
+        self.shop_database.order_delete(id_order)
+        self.shop_database.request.assert_called_once_with('delete', self.api_url + '/orders/' + str(id_order))
+
     def tearDown(self):
         self.shop_database = None
         self.api_url = None

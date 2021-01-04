@@ -562,6 +562,14 @@ class TestShopDatabase(unittest.TestCase):
         }, self.database['orders']))
         self.assertListEqual(self.shop_database.order_get(), orders)
 
+    def test_order_get(self):
+        id_order = 0
+        order = {
+            **self.database['orders'][id_order],
+            'ids_items': self.get_ids_items(id_order)
+        }
+        self.assertDictEqual(self.shop_database.order_get(order['id']), order)
+
     def tearDown(self):
         self.shop_database = None
         self.api_url = None

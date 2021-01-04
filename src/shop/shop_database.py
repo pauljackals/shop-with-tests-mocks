@@ -203,6 +203,9 @@ class ShopDatabase:
                     'id_client': id_client,
                     'ids_items': ids_items
                 })
-                return response.json()
+                if response.status_code == 404:
+                    raise LookupError("Referenced entities don't exist")
+                else:
+                    return response.json()
             except requests.RequestException:
                 raise ConnectionError("Can't post order to database")

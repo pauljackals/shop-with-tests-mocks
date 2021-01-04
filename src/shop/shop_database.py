@@ -186,3 +186,10 @@ class ShopDatabase:
                     return response.json()
             except requests.RequestException:
                 raise ConnectionError("Can't " + method + " item in database")
+
+    def order_post(self, id_client, ids_items):
+        response = self.request('post', self.api_url + '/orders/', data={
+            'id_client': id_client,
+            'ids_items': ids_items
+        })
+        return response.json()

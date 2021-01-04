@@ -517,6 +517,10 @@ class TestShopDatabase(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "^Items IDs must not be empty$"):
             self.shop_database.order_post(1, [])
 
+    def test_order_post_wrong_type_items_elements(self):
+        with self.assertRaisesRegex(TypeError, "^Items IDs must all be integers$"):
+            self.shop_database.order_post(1, [0, '1', 2])
+
     def tearDown(self):
         self.shop_database = None
         self.api_url = None

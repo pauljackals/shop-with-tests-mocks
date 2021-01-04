@@ -529,6 +529,11 @@ class TestShopDatabase(unittest.TestCase):
         self.shop_database.order_post(**order_new)
         self.shop_database.request.assert_called_once_with('post', self.api_url + '/orders/', data=order_new)
 
+    def test_order_post_connection_error(self):
+        self.shop_database.request.side_effect = requests.ConnectionError
+        with self.assertRaisesRegex(ConnectionError, "^Can't post order to database$"):
+            self.shop_database.order_post(1, [0, 2])
+
     def tearDown(self):
         self.shop_database = None
         self.api_url = None

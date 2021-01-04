@@ -190,6 +190,8 @@ class ShopDatabase:
     def order_post(self, id_client, ids_items):
         if type(id_client) != int:
             raise TypeError("Client ID must be an integer")
+        elif type(ids_items) != list:
+            raise TypeError("Items IDs must be a list")
         else:
             response = self.request('post', self.api_url + '/orders/', data={
                 'id_client': id_client,

@@ -588,6 +588,10 @@ class TestShopDatabase(unittest.TestCase):
         with self.assertRaisesRegex(ConnectionError, "^Can't get order from database$"):
             self.shop_database.order_get(0)
 
+    def test_orders_get_mock_check(self):
+        self.shop_database.order_get()
+        self.shop_database.request.assert_called_once_with('get', self.api_url + '/orders/')
+
     def tearDown(self):
         self.shop_database = None
         self.api_url = None

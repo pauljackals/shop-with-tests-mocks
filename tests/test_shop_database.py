@@ -505,6 +505,10 @@ class TestShopDatabase(unittest.TestCase):
             **order_new
         })
 
+    def test_order_post_wrong_type_client(self):
+        with self.assertRaisesRegex(TypeError, "^Client ID must be an integer$"):
+            self.shop_database.order_post('1', [0, 2])
+
     def tearDown(self):
         self.shop_database = None
         self.api_url = None

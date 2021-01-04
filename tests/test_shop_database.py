@@ -578,6 +578,11 @@ class TestShopDatabase(unittest.TestCase):
         with self.assertRaisesRegex(LookupError, "^Order with such ID doesn't exist$"):
             self.shop_database.order_get(999)
 
+    def test_orders_get_connection_error(self):
+        self.shop_database.request.side_effect = requests.ConnectionError
+        with self.assertRaisesRegex(ConnectionError, "^Can't get orders from database$"):
+            self.shop_database.order_get()
+
     def tearDown(self):
         self.shop_database = None
         self.api_url = None

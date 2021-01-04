@@ -209,3 +209,6 @@ class ShopDatabase:
                     return response.json()
             except requests.RequestException:
                 raise ConnectionError("Can't post order to database")
+
+    def order_get(self, id_order=None):
+        return self.__entity_get(self.request, self.api_url, 'orders', 'order', id_order)

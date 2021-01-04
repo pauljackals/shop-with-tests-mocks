@@ -613,6 +613,11 @@ class TestShopDatabase(unittest.TestCase):
         with self.assertRaisesRegex(LookupError, "^Order with such ID doesn't exist$"):
             self.shop_database.order_delete(999)
 
+    def test_order_delete_connection_error(self):
+        self.shop_database.request.side_effect = requests.ConnectionError
+        with self.assertRaisesRegex(ConnectionError, "^Can't delete order from database$"):
+            self.shop_database.order_delete(0)
+
     def tearDown(self):
         self.shop_database = None
         self.api_url = None

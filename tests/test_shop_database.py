@@ -521,6 +521,14 @@ class TestShopDatabase(unittest.TestCase):
         with self.assertRaisesRegex(TypeError, "^Items IDs must all be integers$"):
             self.shop_database.order_post(1, [0, '1', 2])
 
+    def test_order_post_mock_check(self):
+        order_new = {
+            'id_client': 1,
+            'ids_items': [0, 2],
+        }
+        self.shop_database.order_post(**order_new)
+        self.shop_database.request.assert_called_once_with('post', self.api_url + '/orders/', data=order_new)
+
     def tearDown(self):
         self.shop_database = None
         self.api_url = None

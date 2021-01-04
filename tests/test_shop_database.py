@@ -63,6 +63,7 @@ class TestShopDatabase(unittest.TestCase):
                 }
             ]
         }
+        self.get_ids_items = lambda id_param: list(map(lambda y: y['id_item'], filter(lambda x: x['id_order'] == id_param, self.database['orders_items'])))
 
         def get_new_id(key):
             new_id = -1
@@ -77,11 +78,23 @@ class TestShopDatabase(unittest.TestCase):
             id_param = None if url_split[-1] == '' else int(url_split[-1])
             if method == 'get' or method == 'delete':
                 if id_param is None:
-                    return TestResponse(self.database[endpoint], 200)
+                    test_response_data = self.database[endpoint]
+                    if endpoint == 'orders':
+                        test_response_data = list(map(lambda x: {
+                            **x,
+                            'ids_items': self.get_ids_items(x['id'])
+                        }, test_response_data))
+                    return TestResponse(test_response_data, 200)
                 else:
                     for entity in self.database[endpoint]:
                         if entity['id'] == id_param:
-                            return TestResponse(entity, 200)
+                            test_response_data = entity
+                            if endpoint == 'orders':
+                                test_response_data = {
+                                    **test_response_data,
+                                    'ids_items': self.get_ids_items(id_param)
+                                }
+                            return TestResponse(test_response_data, 200)
                     return TestResponse({}, 404)
             elif method == 'post':
                 if endpoint == 'clients':
@@ -542,11 +555,19 @@ class TestShopDatabase(unittest.TestCase):
         with self.assertRaisesRegex(LookupError, "^Referenced entities don't exist$"):
             self.shop_database.order_post(1, [0, 999])
 
+    def test_orders_get(self):
+        orders = list(map(lambda x: {
+            **x,
+            'ids_items': self.get_ids_items(x['id'])
+        }, self.database['orders']))
+        self.assertListEqual(self.shop_database.order_get(), orders)
+
     def tearDown(self):
         self.shop_database = None
         self.api_url = None
         self.get_new_id = None
         self.shop_database = None
+        self.get_ids_items = None
 
 
 class TestResponse:

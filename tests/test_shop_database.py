@@ -597,6 +597,14 @@ class TestShopDatabase(unittest.TestCase):
         self.shop_database.order_get(id_order)
         self.shop_database.request.assert_called_once_with('get', self.api_url + '/orders/' + str(id_order))
 
+    def test_order_delete(self):
+        id_order = 0
+        order = {
+            **self.database['orders'][id_order],
+            'ids_items': self.get_ids_items(id_order)
+        }
+        self.assertDictEqual(self.shop_database.order_delete(order['id']), order)
+
     def tearDown(self):
         self.shop_database = None
         self.api_url = None

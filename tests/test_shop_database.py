@@ -37,6 +37,30 @@ class TestShopDatabase(unittest.TestCase):
                     'name': 'Nintendo Switch',
                     'value': 1479.00
                 }
+            ],
+            'orders': [
+                {
+                    'id': 0,
+                    'id_client': 0
+                },
+                {
+                    'id': 1,
+                    'id_client': 1
+                }
+            ],
+            'orders_items': [
+                {
+                    'id_item': 2,
+                    'id_order': 0
+                },
+                {
+                    'id_item': 1,
+                    'id_order': 1
+                },
+                {
+                    'id_item': 0,
+                    'id_order': 1
+                }
             ]
         }
 
@@ -64,6 +88,19 @@ class TestShopDatabase(unittest.TestCase):
                     for entity in self.database[endpoint]:
                         if entity['email'] == data['email']:
                             return TestResponse({}, 409)
+                elif endpoint == 'orders':
+                    order_correct = False
+                    for client in self.database['clients']:
+                        if client['id'] == data['id_client']:
+                            order_correct = True
+                            break
+                    if order_correct:
+                        ids_items = map(lambda item: item['id'], self.database['items'])
+                        for id_item in data['ids_items']:
+                            if id_item not in ids_items:
+                                order_correct = False
+                    if not order_correct:
+                        return TestResponse({}, 404)
                 return TestResponse({
                     'id': get_new_id(endpoint),
                     **data
@@ -457,6 +494,16 @@ class TestShopDatabase(unittest.TestCase):
         self.shop_database.request.side_effect = requests.ConnectionError
         with self.assertRaisesRegex(ConnectionError, "^Can't patch item in database$"):
             self.shop_database.item_put_patch(1, name='PlayStation 3')
+
+    def test_order_post(self):
+        order_new = {
+            'id_client': 1,
+            'ids_items': [0, 2]
+        }
+        self.assertDictEqual(self.shop_database.order_post(**order_new), {
+            'id': self.get_new_id('orders'),
+            **order_new
+        })
 
     def tearDown(self):
         self.shop_database = None

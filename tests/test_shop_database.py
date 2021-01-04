@@ -592,6 +592,11 @@ class TestShopDatabase(unittest.TestCase):
         self.shop_database.order_get()
         self.shop_database.request.assert_called_once_with('get', self.api_url + '/orders/')
 
+    def test_order_get_mock_check(self):
+        id_order = 0
+        self.shop_database.order_get(id_order)
+        self.shop_database.request.assert_called_once_with('get', self.api_url + '/orders/' + str(id_order))
+
     def tearDown(self):
         self.shop_database = None
         self.api_url = None

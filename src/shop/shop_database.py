@@ -212,3 +212,6 @@ class ShopDatabase:
 
     def order_get(self, id_order=None):
         return self.__entity_get(self.request, self.api_url, 'orders', 'order', id_order)
+
+    def order_delete(self, id_order):
+        return self.__entity_delete(self.request, self.api_url, 'orders', 'order', id_order)

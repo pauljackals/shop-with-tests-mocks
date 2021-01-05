@@ -81,6 +81,10 @@ class TestShopApp(unittest.TestCase):
         self.shop_app.download_client(id_client)
         self.shop_app.shop_database.client_get.assert_called_with(id_client)
 
+    def test_download_all_clients(self):
+        clients = self.database_simplified['clients']
+        self.assertListEqual(self.shop_app.download_all_clients(), clients)
+
     def tearDown(self):
         self.shop_app = None
         self.database_simplified = None

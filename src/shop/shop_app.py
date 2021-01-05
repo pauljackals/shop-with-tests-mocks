@@ -16,3 +16,7 @@ class ShopApp:
     def download_all_clients(self):
         clients = self.shop_database.client_get()
         return clients
+
+    def remove_client(self, id_client):
+        self.shop_database.client_delete(id_client)
+        return True

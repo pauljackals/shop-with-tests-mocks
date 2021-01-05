@@ -61,6 +61,7 @@ class TestShopApp(unittest.TestCase):
         mock_shop_database.client_post.return_value = {'id': 2}
         mock_shop_database.client_get.side_effect = lambda id_client=None: get_side_effect('clients', id_client)
         mock_shop_database.client_delete.return_value = {}
+        mock_shop_database.client_put_patch.return_value = {}
 
         self.shop_app = ShopApp('http://example.com')
         self.shop_app.shop_database = mock_shop_database
@@ -97,6 +98,9 @@ class TestShopApp(unittest.TestCase):
         id_client = 0
         self.shop_app.remove_client(id_client)
         self.shop_app.shop_database.client_delete.assert_called_with(id_client)
+
+    def test_modify_client(self):
+        self.assertTrue(self.shop_app.modify_client(1, 'Henry', 'Glenn', 'henry_glenn@example.com'))
 
     def tearDown(self):
         self.shop_app = None

@@ -102,6 +102,13 @@ class TestShopApp(unittest.TestCase):
     def test_modify_client(self):
         self.assertTrue(self.shop_app.modify_client(1, 'Henry', 'Glenn', 'henry_glenn@example.com'))
 
+    def test_modify_client_mock_check(self):
+        id_client = 0
+        name_first = 'Henry'
+        email = 'henry_glenn@example.com'
+        self.shop_app.modify_client(id_client, name_first=name_first, email=email)
+        self.shop_app.shop_database.client_put_patch.assert_called_with(id_client, name_first, None, email)
+
     def tearDown(self):
         self.shop_app = None
         self.database_simplified = None

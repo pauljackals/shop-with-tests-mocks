@@ -76,6 +76,11 @@ class TestShopApp(unittest.TestCase):
         client = self.database_simplified['clients'][1]
         self.assertDictEqual(self.shop_app.download_client(client['id']), client)
 
+    def test_download_client_mock_check(self):
+        id_client = 0
+        self.shop_app.download_client(id_client)
+        self.shop_app.shop_database.client_get.assert_called_with(id_client)
+
     def tearDown(self):
         self.shop_app = None
         self.database_simplified = None

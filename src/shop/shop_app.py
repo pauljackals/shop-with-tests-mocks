@@ -20,3 +20,7 @@ class ShopApp:
     def remove_client(self, id_client):
         self.shop_database.client_delete(id_client)
         return True
+
+    def modify_client(self, id_client, name_first=None, name_last=None, email=None):
+        self.shop_database.client_put_patch(id_client, name_first, name_last, email)
+        return True

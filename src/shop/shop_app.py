@@ -12,3 +12,7 @@ class ShopApp:
     def download_client(self, id_client):
         client = self.shop_database.client_get(id_client)
         return client
+
+    def download_all_clients(self):
+        clients = self.shop_database.client_get()
+        return clients

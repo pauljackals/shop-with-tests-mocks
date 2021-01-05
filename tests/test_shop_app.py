@@ -93,6 +93,11 @@ class TestShopApp(unittest.TestCase):
     def test_remove_client(self):
         self.assertTrue(self.shop_app.remove_client(1))
 
+    def test_remove_client_mock_check(self):
+        id_client = 0
+        self.shop_app.remove_client(id_client)
+        self.shop_app.shop_database.client_delete.assert_called_with(id_client)
+
     def tearDown(self):
         self.shop_app = None
         self.database_simplified = None

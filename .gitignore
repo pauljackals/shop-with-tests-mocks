@@ -14,3 +14,4 @@ __pycache__/
 .tox
 .cache
 /venv/
+/.coverage

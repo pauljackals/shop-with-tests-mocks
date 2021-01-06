@@ -216,10 +216,10 @@ class ShopDatabase:
     def order_delete(self, id_order):
         return self.__entity_delete(self.request, self.api_url, 'orders', 'order', id_order)
 
-    def order_put_patch(self, id_order, id_client, ids_items):
-        if type(id_order) != int or (type(id_client) != int):
+    def order_put_patch(self, id_order, id_client=None, ids_items=None):
+        if type(id_order) != int or (id_client is not None and type(id_client) != int):
             raise TypeError("Both order and client IDs must be integers")
-        elif type(ids_items) != list:
+        elif ids_items is not None and type(ids_items) != list:
             raise TypeError("Items IDs must be a list")
         elif ids_items is not None and len(ids_items) < 1:
             raise ValueError("Items IDs must not be empty")
@@ -228,11 +228,11 @@ class ShopDatabase:
                 for i in ids_items:
                     if type(i) != int:
                         raise TypeError("Items IDs must all be integers")
-            method = 'put'
+            method = 'patch' if None in [id_client, ids_items] else 'put'
             try:
                 response = self.request(method, self.api_url + '/orders/' + str(id_order), data={
-                    **({'id_client': id_client}),
-                    **({'ids_items': ids_items})
+                    **({} if id_client is None else {'id_client': id_client}),
+                    **({} if ids_items is None else {'ids_items': ids_items})
                 })
                 if response.status_code == 404:
                     raise LookupError("Entity with such ID doesn't exist")

@@ -36,3 +36,7 @@ class ShopApp:
     def download_all_items(self):
         items = self.shop_database.item_get()
         return items
+
+    def remove_item(self, id_item):
+        self.shop_database.item_delete(id_item)
+        return True

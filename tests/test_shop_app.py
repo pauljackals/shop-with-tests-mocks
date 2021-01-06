@@ -141,6 +141,11 @@ class TestShopApp(unittest.TestCase):
     def test_remove_item(self):
         self.assertTrue(self.shop_app.remove_item(1))
 
+    def test_remove_item_mock_check(self):
+        id_item = 0
+        self.shop_app.remove_item(id_item)
+        self.shop_app.shop_database.item_delete.assert_called_with(id_item)
+
     def tearDown(self):
         self.shop_app = None
         self.database_simplified = None

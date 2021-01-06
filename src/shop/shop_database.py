@@ -219,6 +219,8 @@ class ShopDatabase:
     def order_put_patch(self, id_order, id_client, ids_items):
         if type(id_order) != int or (type(id_client) != int):
             raise TypeError("Both order and client IDs must be integers")
+        elif type(ids_items) != list:
+            raise TypeError("Items IDs must be a list")
         else:
             method = 'put'
             response = self.request(method, self.api_url + '/orders/' + str(id_order), data={

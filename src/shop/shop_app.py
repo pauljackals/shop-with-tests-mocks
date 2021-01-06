@@ -56,3 +56,7 @@ class ShopApp:
     def download_all_orders(self):
         orders = self.shop_database.order_get()
         return orders
+
+    def remove_order(self, id_order):
+        self.shop_database.order_delete(id_order)
+        return True

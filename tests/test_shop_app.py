@@ -197,6 +197,10 @@ class TestShopApp(unittest.TestCase):
         orders = list(filter(lambda order: order['id_client'] == id_client, self.database_simplified['orders']))
         self.assertListEqual(self.shop_app.get_client_orders(id_client), orders)
 
+    def test_get_client_orders_mock_check(self):
+        self.shop_app.get_client_orders(0)
+        self.shop_app.shop_database.order_get.assert_called_once_with()
+
     def tearDown(self):
         self.shop_app = None
         self.database_simplified = None

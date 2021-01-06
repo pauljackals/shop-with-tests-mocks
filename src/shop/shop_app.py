@@ -24,3 +24,7 @@ class ShopApp:
     def modify_client(self, id_client, name_first=None, name_last=None, email=None):
         self.shop_database.client_put_patch(id_client, name_first, name_last, email)
         return True
+
+    def add_item(self, name, value):
+        item = self.shop_database.item_post(name, value)
+        return item['id']

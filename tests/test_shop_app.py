@@ -1,5 +1,5 @@
 import unittest
-from unittest.mock import Mock
+from unittest.mock import Mock, call
 from src.shop.shop_app import ShopApp
 
 
@@ -191,6 +191,11 @@ class TestShopApp(unittest.TestCase):
         id_order = 0
         self.shop_app.remove_order(id_order)
         self.shop_app.shop_database.order_delete.assert_called_once_with(id_order)
+
+    def test_get_client_orders(self):
+        id_client = 0
+        orders = list(filter(lambda order: order['id_client'] == id_client, self.database_simplified['orders']))
+        self.assertListEqual(self.shop_app.get_client_orders(id_client), orders)
 
     def tearDown(self):
         self.shop_app = None

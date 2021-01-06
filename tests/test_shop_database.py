@@ -663,6 +663,10 @@ class TestShopDatabase(unittest.TestCase):
         with self.assertRaisesRegex(TypeError, "^Items IDs must be a list$"):
             self.shop_database.order_put_patch(1, 1, 2)
 
+    def test_order_put_items_empty(self):
+        with self.assertRaisesRegex(ValueError, "^Items IDs must not be empty$"):
+            self.shop_database.order_put_patch(1, 1, [])
+
     def tearDown(self):
         self.shop_database = None
         self.api_url = None

@@ -60,3 +60,7 @@ class ShopApp:
     def remove_order(self, id_order):
         self.shop_database.order_delete(id_order)
         return True
+
+    def get_client_orders(self, id_client):
+        orders = self.download_all_orders()
+        return list(filter(lambda order: order['id_client'] == id_client, orders))

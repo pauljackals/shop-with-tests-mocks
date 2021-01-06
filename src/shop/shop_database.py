@@ -229,11 +229,14 @@ class ShopDatabase:
                     if type(i) != int:
                         raise TypeError("Items IDs must all be integers")
             method = 'put'
-            response = self.request(method, self.api_url + '/orders/' + str(id_order), data={
-                **({'id_client': id_client}),
-                **({'ids_items': ids_items})
-            })
-            if response.status_code == 404:
-                raise LookupError("Entity with such ID doesn't exist")
-            else:
-                return response.json()
+            try:
+                response = self.request(method, self.api_url + '/orders/' + str(id_order), data={
+                    **({'id_client': id_client}),
+                    **({'ids_items': ids_items})
+                })
+                if response.status_code == 404:
+                    raise LookupError("Entity with such ID doesn't exist")
+                else:
+                    return response.json()
+            except requests.RequestException:
+                raise ConnectionError("Can't " + method + " order in database")

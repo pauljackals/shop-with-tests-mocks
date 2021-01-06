@@ -52,3 +52,7 @@ class ShopApp:
     def download_order(self, id_order):
         order = self.shop_database.order_get(id_order)
         return order
+
+    def download_all_orders(self):
+        orders = self.shop_database.order_get()
+        return orders

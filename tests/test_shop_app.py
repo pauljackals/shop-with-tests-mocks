@@ -211,6 +211,11 @@ class TestShopApp(unittest.TestCase):
         self.shop_app.get_order_total(order['id'])
         self.shop_app.shop_database.item_get.assert_has_calls(map(lambda id_item: call(id_item), order['ids_items']))
 
+    def test_get_order_total_mock_check_order(self):
+        id_order = 1
+        self.shop_app.get_order_total(id_order)
+        self.shop_app.shop_database.order_get.assert_called_once_with(id_order)
+
     def tearDown(self):
         self.shop_app = None
         self.database_simplified = None

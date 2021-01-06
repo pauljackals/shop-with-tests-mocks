@@ -671,6 +671,10 @@ class TestShopDatabase(unittest.TestCase):
         with self.assertRaisesRegex(TypeError, "^Items IDs must all be integers$"):
             self.shop_database.order_put_patch(1, 1, [1, '2'])
 
+    def test_item_put_missing_order(self):
+        with self.assertRaisesRegex(LookupError, "^Entity with such ID doesn't exist$"):
+            self.shop_database.order_put_patch(999, 1, [1, 2])
+
     def tearDown(self):
         self.shop_database = None
         self.api_url = None

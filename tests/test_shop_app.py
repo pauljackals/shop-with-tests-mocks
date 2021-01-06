@@ -69,6 +69,7 @@ class TestShopApp(unittest.TestCase):
         mock_shop_database.item_put_patch.return_value = {}
 
         mock_shop_database.order_post.return_value = {'id': 2}
+        mock_shop_database.order_get.side_effect = lambda id_order=None: get_side_effect('orders', id_order)
 
         self.shop_app = ShopApp('http://example.com')
         self.shop_app.shop_database = mock_shop_database
@@ -164,6 +165,10 @@ class TestShopApp(unittest.TestCase):
         params = 0, [0]
         self.shop_app.make_order(*params)
         self.shop_app.shop_database.order_post.assert_called_with(*params)
+
+    def test_download_order(self):
+        order = self.database_simplified['orders'][1]
+        self.assertDictEqual(self.shop_app.download_order(order['id']), order)
 
     def tearDown(self):
         self.shop_app = None

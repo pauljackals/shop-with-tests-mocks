@@ -224,6 +224,10 @@ class ShopDatabase:
         elif ids_items is not None and len(ids_items) < 1:
             raise ValueError("Items IDs must not be empty")
         else:
+            if ids_items is not None:
+                for i in ids_items:
+                    if type(i) != int:
+                        raise TypeError("Items IDs must all be integers")
             method = 'put'
             response = self.request(method, self.api_url + '/orders/' + str(id_order), data={
                 **({'id_client': id_client}),

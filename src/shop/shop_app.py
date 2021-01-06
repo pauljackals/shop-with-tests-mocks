@@ -64,3 +64,11 @@ class ShopApp:
     def get_client_orders(self, id_client):
         orders = self.download_all_orders()
         return list(filter(lambda order: order['id_client'] == id_client, orders))
+
+    def get_order_total(self, id_order):
+        order = self.download_order(id_order)
+        total = 0
+        for id_item in order['ids_items']:
+            item = self.download_item(id_item)
+            total += item['value']
+        return total

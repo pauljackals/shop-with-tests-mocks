@@ -32,3 +32,7 @@ class ShopApp:
     def download_item(self, id_item):
         item = self.shop_database.item_get(id_item)
         return item
+
+    def download_all_items(self):
+        items = self.shop_database.item_get()
+        return items

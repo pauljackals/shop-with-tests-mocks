@@ -70,6 +70,7 @@ class TestShopApp(unittest.TestCase):
 
         mock_shop_database.order_post.return_value = {'id': 2}
         mock_shop_database.order_get.side_effect = lambda id_order=None: get_side_effect('orders', id_order)
+        mock_shop_database.order_delete.return_value = {}
 
         self.shop_app = ShopApp('http://example.com')
         self.shop_app.shop_database = mock_shop_database
@@ -182,6 +183,9 @@ class TestShopApp(unittest.TestCase):
     def test_download_all_orders_mock_check(self):
         self.shop_app.download_all_orders()
         self.shop_app.shop_database.order_get.assert_called_with()
+
+    def test_remove_order(self):
+        self.assertTrue(self.shop_app.remove_order(1))
 
     def tearDown(self):
         self.shop_app = None

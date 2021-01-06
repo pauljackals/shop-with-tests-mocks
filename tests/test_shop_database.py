@@ -723,6 +723,10 @@ class TestShopDatabase(unittest.TestCase):
         with self.assertRaisesRegex(ConnectionError, "^Can't patch order in database$"):
             self.shop_database.order_put_patch(1, id_client=0)
 
+    def test_item_patch_missing_client(self):
+        with self.assertRaisesRegex(LookupError, "^Entity with such ID doesn't exist$"):
+            self.shop_database.order_put_patch(1, id_client=999)
+
     def tearDown(self):
         self.shop_database = None
         self.api_url = None

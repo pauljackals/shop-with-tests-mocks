@@ -81,7 +81,7 @@ class TestShopApp(unittest.TestCase):
     def test_register_client_mock_check(self):
         params = 'Henry', 'Glenn', 'henry_glenn@example.com'
         self.shop_app.register_client(*params)
-        self.shop_app.shop_database.client_post.assert_called_with(*params)
+        self.shop_app.shop_database.client_post.assert_called_once_with(*params)
 
     def test_download_client(self):
         client = self.database_simplified['clients'][1]
@@ -90,7 +90,7 @@ class TestShopApp(unittest.TestCase):
     def test_download_client_mock_check(self):
         id_client = 0
         self.shop_app.download_client(id_client)
-        self.shop_app.shop_database.client_get.assert_called_with(id_client)
+        self.shop_app.shop_database.client_get.assert_called_once_with(id_client)
 
     def test_download_all_clients(self):
         clients = self.database_simplified['clients']
@@ -98,7 +98,7 @@ class TestShopApp(unittest.TestCase):
 
     def test_download_all_clients_mock_check(self):
         self.shop_app.download_all_clients()
-        self.shop_app.shop_database.client_get.assert_called_with()
+        self.shop_app.shop_database.client_get.assert_called_once_with()
 
     def test_remove_client(self):
         self.assertTrue(self.shop_app.remove_client(1))
@@ -106,7 +106,7 @@ class TestShopApp(unittest.TestCase):
     def test_remove_client_mock_check(self):
         id_client = 0
         self.shop_app.remove_client(id_client)
-        self.shop_app.shop_database.client_delete.assert_called_with(id_client)
+        self.shop_app.shop_database.client_delete.assert_called_once_with(id_client)
 
     def test_modify_client(self):
         self.assertTrue(self.shop_app.modify_client(1, 'Henry', 'Glenn', 'henry_glenn@example.com'))
@@ -116,7 +116,7 @@ class TestShopApp(unittest.TestCase):
         name_first = 'Henry'
         email = 'henry_glenn@example.com'
         self.shop_app.modify_client(id_client, name_first=name_first, email=email)
-        self.shop_app.shop_database.client_put_patch.assert_called_with(id_client, name_first, None, email)
+        self.shop_app.shop_database.client_put_patch.assert_called_once_with(id_client, name_first, None, email)
 
     def test_add_item(self):
         self.assertEqual(self.shop_app.add_item('PlayStation 5', 2199.99), 3)
@@ -124,7 +124,7 @@ class TestShopApp(unittest.TestCase):
     def test_add_item_mock_check(self):
         params = 'PlayStation 5', 2199.99
         self.shop_app.add_item(*params)
-        self.shop_app.shop_database.item_post.assert_called_with(*params)
+        self.shop_app.shop_database.item_post.assert_called_once_with(*params)
 
     def test_download_item(self):
         item = self.database_simplified['items'][1]
@@ -133,7 +133,7 @@ class TestShopApp(unittest.TestCase):
     def test_download_item_mock_check(self):
         id_item = 0
         self.shop_app.download_item(id_item)
-        self.shop_app.shop_database.item_get.assert_called_with(id_item)
+        self.shop_app.shop_database.item_get.assert_called_once_with(id_item)
 
     def test_download_all_items(self):
         items = self.database_simplified['items']
@@ -141,7 +141,7 @@ class TestShopApp(unittest.TestCase):
 
     def test_download_all_items_mock_check(self):
         self.shop_app.download_all_items()
-        self.shop_app.shop_database.item_get.assert_called_with()
+        self.shop_app.shop_database.item_get.assert_called_once_with()
 
     def test_remove_item(self):
         self.assertTrue(self.shop_app.remove_item(1))
@@ -149,7 +149,7 @@ class TestShopApp(unittest.TestCase):
     def test_remove_item_mock_check(self):
         id_item = 0
         self.shop_app.remove_item(id_item)
-        self.shop_app.shop_database.item_delete.assert_called_with(id_item)
+        self.shop_app.shop_database.item_delete.assert_called_once_with(id_item)
 
     def test_modify_item(self):
         self.assertTrue(self.shop_app.modify_item(1, value=799.99))
@@ -157,7 +157,7 @@ class TestShopApp(unittest.TestCase):
     def test_modify_item_mock_check(self):
         params = 0, 'PlayStation 5', 2199.99
         self.shop_app.modify_item(*params)
-        self.shop_app.shop_database.item_put_patch.assert_called_with(*params)
+        self.shop_app.shop_database.item_put_patch.assert_called_once_with(*params)
 
     def test_make_order(self):
         self.assertEqual(self.shop_app.make_order(0, [0]), 2)
@@ -165,7 +165,7 @@ class TestShopApp(unittest.TestCase):
     def test_make_order_mock_check(self):
         params = 0, [0]
         self.shop_app.make_order(*params)
-        self.shop_app.shop_database.order_post.assert_called_with(*params)
+        self.shop_app.shop_database.order_post.assert_called_once_with(*params)
 
     def test_download_order(self):
         order = self.database_simplified['orders'][1]
@@ -174,7 +174,7 @@ class TestShopApp(unittest.TestCase):
     def test_download_order_mock_check(self):
         id_order = 0
         self.shop_app.download_order(id_order)
-        self.shop_app.shop_database.order_get.assert_called_with(id_order)
+        self.shop_app.shop_database.order_get.assert_called_once_with(id_order)
 
     def test_download_all_orders(self):
         orders = self.database_simplified['orders']
@@ -182,7 +182,7 @@ class TestShopApp(unittest.TestCase):
 
     def test_download_all_orders_mock_check(self):
         self.shop_app.download_all_orders()
-        self.shop_app.shop_database.order_get.assert_called_with()
+        self.shop_app.shop_database.order_get.assert_called_once_with()
 
     def test_remove_order(self):
         self.assertTrue(self.shop_app.remove_order(1))
@@ -190,7 +190,7 @@ class TestShopApp(unittest.TestCase):
     def test_remove_order_mock_check(self):
         id_order = 0
         self.shop_app.remove_order(id_order)
-        self.shop_app.shop_database.order_delete.assert_called_with(id_order)
+        self.shop_app.shop_database.order_delete.assert_called_once_with(id_order)
 
     def tearDown(self):
         self.shop_app = None

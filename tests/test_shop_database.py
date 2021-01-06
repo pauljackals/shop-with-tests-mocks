@@ -727,6 +727,10 @@ class TestShopDatabase(unittest.TestCase):
         with self.assertRaisesRegex(LookupError, "^Entity with such ID doesn't exist$"):
             self.shop_database.order_put_patch(1, id_client=999)
 
+    def test_item_patch_missing_item(self):
+        with self.assertRaisesRegex(LookupError, "^Entity with such ID doesn't exist$"):
+            self.shop_database.order_put_patch(1, ids_items=[1, 999])
+
     def tearDown(self):
         self.shop_database = None
         self.api_url = None

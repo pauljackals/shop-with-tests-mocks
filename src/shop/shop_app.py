@@ -72,3 +72,7 @@ class ShopApp:
             item = self.download_item(id_item)
             total += item['value']
         return total
+
+    def modify_order(self, id_order, id_client=None, ids_items=None):
+        self.shop_database.order_put_patch(id_order, id_client, ids_items)
+        return True

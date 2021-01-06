@@ -659,6 +659,10 @@ class TestShopDatabase(unittest.TestCase):
         with self.assertRaisesRegex(TypeError, "^Both order and client IDs must be integers$"):
             self.shop_database.order_put_patch(1, '1', [1, 2])
 
+    def test_order_put_wrong_type_list(self):
+        with self.assertRaisesRegex(TypeError, "^Items IDs must be a list$"):
+            self.shop_database.order_put_patch(1, 1, 2)
+
     def tearDown(self):
         self.shop_database = None
         self.api_url = None

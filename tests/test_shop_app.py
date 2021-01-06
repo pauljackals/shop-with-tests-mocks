@@ -220,6 +220,12 @@ class TestShopApp(unittest.TestCase):
     def test_modify_order(self):
         self.assertTrue(self.shop_app.modify_order(1, 1, [0, 1, 2]))
 
+    def test_modify_order_mock_check(self):
+        id_order = 0
+        ids_items = [0, 1, 2]
+        self.shop_app.modify_order(id_order, ids_items=ids_items)
+        self.shop_app.shop_database.order_put_patch.assert_called_once_with(id_order, None, ids_items)
+
     def tearDown(self):
         self.shop_app = None
         self.database_simplified = None

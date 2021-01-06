@@ -170,6 +170,11 @@ class TestShopApp(unittest.TestCase):
         order = self.database_simplified['orders'][1]
         self.assertDictEqual(self.shop_app.download_order(order['id']), order)
 
+    def test_download_order_mock_check(self):
+        id_order = 0
+        self.shop_app.download_order(id_order)
+        self.shop_app.shop_database.order_get.assert_called_with(id_order)
+
     def tearDown(self):
         self.shop_app = None
         self.database_simplified = None

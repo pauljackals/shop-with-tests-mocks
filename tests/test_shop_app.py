@@ -124,6 +124,11 @@ class TestShopApp(unittest.TestCase):
         item = self.database_simplified['items'][1]
         self.assertDictEqual(self.shop_app.download_item(item['id']), item)
 
+    def test_download_item_mock_check(self):
+        id_item = 0
+        self.shop_app.download_item(id_item)
+        self.shop_app.shop_database.item_get.assert_called_with(id_item)
+
     def tearDown(self):
         self.shop_app = None
         self.database_simplified = None

@@ -63,6 +63,8 @@ class TestShopApp(unittest.TestCase):
         mock_shop_database.client_delete.return_value = {}
         mock_shop_database.client_put_patch.return_value = {}
 
+        mock_shop_database.item_post.return_value = {'id': 3}
+
         self.shop_app = ShopApp('http://example.com')
         self.shop_app.shop_database = mock_shop_database
 
@@ -108,6 +110,9 @@ class TestShopApp(unittest.TestCase):
         email = 'henry_glenn@example.com'
         self.shop_app.modify_client(id_client, name_first=name_first, email=email)
         self.shop_app.shop_database.client_put_patch.assert_called_with(id_client, name_first, None, email)
+
+    def test_add_item(self):
+        self.assertEqual(self.shop_app.add_item('PlayStation 5', 2199.99), 3)
 
     def tearDown(self):
         self.shop_app = None

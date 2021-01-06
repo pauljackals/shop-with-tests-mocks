@@ -150,6 +150,11 @@ class TestShopApp(unittest.TestCase):
     def test_modify_item(self):
         self.assertTrue(self.shop_app.modify_item(1, value=799.99))
 
+    def test_modify_item_mock_check(self):
+        params = 0, 'PlayStation 5', 2199.99
+        self.shop_app.modify_item(*params)
+        self.shop_app.shop_database.item_put_patch.assert_called_with(*params)
+
     def tearDown(self):
         self.shop_app = None
         self.database_simplified = None

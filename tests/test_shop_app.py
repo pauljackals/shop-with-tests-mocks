@@ -114,6 +114,11 @@ class TestShopApp(unittest.TestCase):
     def test_add_item(self):
         self.assertEqual(self.shop_app.add_item('PlayStation 5', 2199.99), 3)
 
+    def test_add_item_mock_check(self):
+        params = 'PlayStation 5', 2199.99
+        self.shop_app.add_item(*params)
+        self.shop_app.shop_database.item_post.assert_called_with(*params)
+
     def tearDown(self):
         self.shop_app = None
         self.database_simplified = None

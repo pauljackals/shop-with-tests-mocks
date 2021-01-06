@@ -28,3 +28,7 @@ class ShopApp:
     def add_item(self, name, value):
         item = self.shop_database.item_post(name, value)
         return item['id']
+
+    def download_item(self, id_item):
+        item = self.shop_database.item_get(id_item)
+        return item

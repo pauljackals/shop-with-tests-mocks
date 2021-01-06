@@ -160,6 +160,11 @@ class TestShopApp(unittest.TestCase):
     def test_make_order(self):
         self.assertEqual(self.shop_app.make_order(0, [0]), 2)
 
+    def test_make_order_mock_check(self):
+        params = 0, [0]
+        self.shop_app.make_order(*params)
+        self.shop_app.shop_database.order_post.assert_called_with(*params)
+
     def tearDown(self):
         self.shop_app = None
         self.database_simplified = None

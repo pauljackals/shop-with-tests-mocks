@@ -237,7 +237,7 @@ class ShopDatabase:
                     **({} if ids_items is None else {'ids_items': ids_items})
                 })
                 if response.status_code == 404:
-                    raise LookupError("Entity with such ID doesn't exist")
+                    raise LookupError("Referenced entities don't exist")
                 else:
                     return response.json()
             except requests.RequestException:

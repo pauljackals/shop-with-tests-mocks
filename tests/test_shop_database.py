@@ -672,15 +672,15 @@ class TestShopDatabase(unittest.TestCase):
             self.shop_database.order_put_patch(1, 1, [1, '2'])
 
     def test_item_put_missing_order(self):
-        with self.assertRaisesRegex(LookupError, "^Entity with such ID doesn't exist$"):
+        with self.assertRaisesRegex(LookupError, "^Referenced entities don't exist$"):
             self.shop_database.order_put_patch(999, 1, [1, 2])
 
     def test_item_put_missing_client(self):
-        with self.assertRaisesRegex(LookupError, "^Entity with such ID doesn't exist$"):
+        with self.assertRaisesRegex(LookupError, "^Referenced entities don't exist$"):
             self.shop_database.order_put_patch(1, 999, [1, 2])
 
     def test_item_put_missing_item(self):
-        with self.assertRaisesRegex(LookupError, "^Entity with such ID doesn't exist$"):
+        with self.assertRaisesRegex(LookupError, "^Referenced entities don't exist$"):
             self.shop_database.order_put_patch(1, 1, [1, 999])
 
     def test_order_put_connection_error(self):
@@ -724,11 +724,11 @@ class TestShopDatabase(unittest.TestCase):
             self.shop_database.order_put_patch(1, id_client=0)
 
     def test_item_patch_missing_client(self):
-        with self.assertRaisesRegex(LookupError, "^Entity with such ID doesn't exist$"):
+        with self.assertRaisesRegex(LookupError, "^Referenced entities don't exist$"):
             self.shop_database.order_put_patch(1, id_client=999)
 
     def test_item_patch_missing_item(self):
-        with self.assertRaisesRegex(LookupError, "^Entity with such ID doesn't exist$"):
+        with self.assertRaisesRegex(LookupError, "^Referenced entities don't exist$"):
             self.shop_database.order_put_patch(1, ids_items=[1, 999])
 
     def tearDown(self):

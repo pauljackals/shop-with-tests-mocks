@@ -201,6 +201,11 @@ class TestShopApp(unittest.TestCase):
         self.shop_app.get_client_orders(0)
         self.shop_app.shop_database.order_get.assert_called_once_with()
 
+    def test_get_order_total(self):
+        order = self.database_simplified['orders'][0]
+        total = sum(map(lambda id_item: self.database_simplified['items'][id_item]['value'], order['ids_items']))
+        self.assertEqual(self.shop_app.get_order_total(order['id']), total)
+
     def tearDown(self):
         self.shop_app = None
         self.database_simplified = None

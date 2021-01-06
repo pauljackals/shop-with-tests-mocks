@@ -215,3 +215,11 @@ class ShopDatabase:
 
     def order_delete(self, id_order):
         return self.__entity_delete(self.request, self.api_url, 'orders', 'order', id_order)
+
+    def order_put_patch(self, id_order, id_client, ids_items):
+        method = 'put'
+        response = self.request(method, self.api_url + '/orders/' + str(id_order), data={
+            **({'id_client': id_client}),
+            **({'ids_items': ids_items})
+        })
+        return response.json()

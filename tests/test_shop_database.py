@@ -655,6 +655,10 @@ class TestShopDatabase(unittest.TestCase):
         }
         self.assertDictEqual(self.shop_database.order_put_patch(*order_updated.values()), order_updated)
 
+    def test_order_put_wrong_type_id_client(self):
+        with self.assertRaisesRegex(TypeError, "^Both order and client IDs must be integers$"):
+            self.shop_database.order_put_patch(1, '1', [1, 2])
+
     def tearDown(self):
         self.shop_database = None
         self.api_url = None

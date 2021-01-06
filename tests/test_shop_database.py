@@ -688,6 +688,15 @@ class TestShopDatabase(unittest.TestCase):
         with self.assertRaisesRegex(ConnectionError, "^Can't put order in database$"):
             self.shop_database.order_put_patch(1, 1, [1, 2])
 
+    def test_order_put_mock_check(self):
+        order_updated_id = 1
+        order_updated = {
+            'id_client': 1,
+            'ids_items': [1, 2]
+        }
+        self.shop_database.order_put_patch(order_updated_id, **order_updated)
+        self.shop_database.request.assert_called_once_with('put', self.api_url + '/orders/' + str(order_updated_id), data=order_updated)
+
     def tearDown(self):
         self.shop_database = None
         self.api_url = None

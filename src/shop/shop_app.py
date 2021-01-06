@@ -44,3 +44,7 @@ class ShopApp:
     def modify_item(self, id_item, name=None, value=None):
         self.shop_database.item_put_patch(id_item, name, value)
         return True
+
+    def make_order(self, id_client, ids_items):
+        order = self.shop_database.order_post(id_client, ids_items)
+        return order['id']

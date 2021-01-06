@@ -48,3 +48,7 @@ class ShopApp:
     def make_order(self, id_client, ids_items):
         order = self.shop_database.order_post(id_client, ids_items)
         return order['id']
+
+    def download_order(self, id_order):
+        order = self.shop_database.order_get(id_order)
+        return order

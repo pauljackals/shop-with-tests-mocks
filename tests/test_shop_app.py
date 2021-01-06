@@ -187,6 +187,11 @@ class TestShopApp(unittest.TestCase):
     def test_remove_order(self):
         self.assertTrue(self.shop_app.remove_order(1))
 
+    def test_remove_order_mock_check(self):
+        id_order = 0
+        self.shop_app.remove_order(id_order)
+        self.shop_app.shop_database.order_delete.assert_called_with(id_order)
+
     def tearDown(self):
         self.shop_app = None
         self.database_simplified = None

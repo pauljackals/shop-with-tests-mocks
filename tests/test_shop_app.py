@@ -129,6 +129,10 @@ class TestShopApp(unittest.TestCase):
         self.shop_app.download_item(id_item)
         self.shop_app.shop_database.item_get.assert_called_with(id_item)
 
+    def test_download_all_items(self):
+        items = self.database_simplified['items']
+        self.assertListEqual(self.shop_app.download_all_items(), items)
+
     def tearDown(self):
         self.shop_app = None
         self.database_simplified = None

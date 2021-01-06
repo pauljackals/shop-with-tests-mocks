@@ -66,6 +66,7 @@ class TestShopApp(unittest.TestCase):
         mock_shop_database.item_post.return_value = {'id': 3}
         mock_shop_database.item_get.side_effect = lambda id_item=None: get_side_effect('items', id_item)
         mock_shop_database.item_delete.return_value = {}
+        mock_shop_database.item_put_patch.return_value = {}
 
         self.shop_app = ShopApp('http://example.com')
         self.shop_app.shop_database = mock_shop_database
@@ -145,6 +146,9 @@ class TestShopApp(unittest.TestCase):
         id_item = 0
         self.shop_app.remove_item(id_item)
         self.shop_app.shop_database.item_delete.assert_called_with(id_item)
+
+    def test_modify_item(self):
+        self.assertTrue(self.shop_app.modify_item(1, value=799.99))
 
     def tearDown(self):
         self.shop_app = None

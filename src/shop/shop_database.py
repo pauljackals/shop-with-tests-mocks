@@ -233,4 +233,7 @@ class ShopDatabase:
                 **({'id_client': id_client}),
                 **({'ids_items': ids_items})
             })
-            return response.json()
+            if response.status_code == 404:
+                raise LookupError("Entity with such ID doesn't exist")
+            else:
+                return response.json()

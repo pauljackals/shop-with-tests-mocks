@@ -706,6 +706,14 @@ class TestShopDatabase(unittest.TestCase):
         }
         self.assertDictEqual(self.shop_database.order_put_patch(order_updated['id'], id_client=order_updated['id_client']), order_updated)
 
+    def test_order_patch_mock_check(self):
+        order_updated_id = 1
+        order_updated = {
+            'id_client': 1
+        }
+        self.shop_database.order_put_patch(order_updated_id, id_client=order_updated['id_client'])
+        self.shop_database.request.assert_called_once_with('patch', self.api_url + '/orders/' + str(order_updated_id), data=order_updated)
+
     def tearDown(self):
         self.shop_database = None
         self.api_url = None

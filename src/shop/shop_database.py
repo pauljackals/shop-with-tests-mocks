@@ -217,7 +217,9 @@ class ShopDatabase:
         return self.__entity_delete(self.request, self.api_url, 'orders', 'order', id_order)
 
     def order_put_patch(self, id_order, id_client=None, ids_items=None):
-        if type(id_order) != int or (id_client is not None and type(id_client) != int):
+        if id_client == ids_items is None:
+            raise AttributeError("Patch must have at least one attribute")
+        elif type(id_order) != int or (id_client is not None and type(id_client) != int):
             raise TypeError("Both order and client IDs must be integers")
         elif ids_items is not None and type(ids_items) != list:
             raise TypeError("Items IDs must be a list")

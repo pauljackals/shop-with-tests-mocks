@@ -61,6 +61,10 @@ class ShopApp:
         self.shop_database.order_delete(id_order)
         return True
 
+    def modify_order(self, id_order, id_client=None, ids_items=None):
+        self.shop_database.order_put_patch(id_order, id_client, ids_items)
+        return True
+
     def get_client_orders(self, id_client):
         orders = self.download_all_orders()
         return list(filter(lambda order: order['id_client'] == id_client, orders))
@@ -72,7 +76,3 @@ class ShopApp:
             item = self.download_item(id_item)
             total += item['value']
         return total
-
-    def modify_order(self, id_order, id_client=None, ids_items=None):
-        self.shop_database.order_put_patch(id_order, id_client, ids_items)
-        return True

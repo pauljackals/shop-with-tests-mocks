@@ -112,6 +112,7 @@ class TestShopDatabase(unittest.TestCase):
                         for id_item in data['ids_items']:
                             if id_item not in ids_items:
                                 order_correct = False
+                                break
                     if not order_correct:
                         return TestResponse({}, 404)
                 return TestResponse({
@@ -123,10 +124,33 @@ class TestShopDatabase(unittest.TestCase):
                     for entity in self.database[endpoint]:
                         if entity['email'] == data['email'] and entity['id'] != id_param:
                             return TestResponse({}, 409)
+                elif endpoint == 'orders':
+                    order_correct = False
+                    if 'id_client' in data:
+                        for client in self.database['clients']:
+                            if client['id'] == data['id_client']:
+                                order_correct = True
+                                break
+                    else:
+                        order_correct = True
+                    if order_correct and 'ids_items' in data:
+                        ids_items = map(lambda item: item['id'], self.database['items'])
+                        for id_item in data['ids_items']:
+                            if id_item not in ids_items:
+                                order_correct = False
+                                break
+                    if not order_correct:
+                        return TestResponse({}, 404)
                 for entity in self.database[endpoint]:
                     if entity['id'] == id_param:
+                        test_response_data = entity
+                        if endpoint == 'orders':
+                            test_response_data = {
+                                **test_response_data,
+                                'ids_items': self.get_ids_items(id_param)
+                            }
                         return TestResponse({
-                            **entity,
+                            **test_response_data,
                             **data
                         }, 200)
                 return TestResponse({}, 404)
@@ -622,6 +646,14 @@ class TestShopDatabase(unittest.TestCase):
         id_order = 0
         self.shop_database.order_delete(id_order)
         self.shop_database.request.assert_called_once_with('delete', self.api_url + '/orders/' + str(id_order))
+
+    def test_order_put(self):
+        order_updated = {
+            'id': 1,
+            'id_client': 1,
+            'ids_items': [1, 2]
+        }
+        self.assertDictEqual(self.shop_database.order_put_patch(*order_updated.values()), order_updated)
 
     def tearDown(self):
         self.shop_database = None

@@ -68,6 +68,8 @@ class TestShopApp(unittest.TestCase):
         mock_shop_database.item_delete.return_value = {}
         mock_shop_database.item_put_patch.return_value = {}
 
+        mock_shop_database.order_post.return_value = {'id': 2}
+
         self.shop_app = ShopApp('http://example.com')
         self.shop_app.shop_database = mock_shop_database
 
@@ -154,6 +156,9 @@ class TestShopApp(unittest.TestCase):
         params = 0, 'PlayStation 5', 2199.99
         self.shop_app.modify_item(*params)
         self.shop_app.shop_database.item_put_patch.assert_called_with(*params)
+
+    def test_make_order(self):
+        self.assertEqual(self.shop_app.make_order(0, [0]), 2)
 
     def tearDown(self):
         self.shop_app = None

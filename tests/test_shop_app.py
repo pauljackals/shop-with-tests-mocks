@@ -1,5 +1,5 @@
 import unittest
-from unittest.mock import Mock, call
+from unittest.mock import MagicMock, call
 from src.shop.shop_app import ShopApp
 
 
@@ -57,7 +57,7 @@ class TestShopApp(unittest.TestCase):
             else:
                 return self.database_simplified[endpoint][id_entity]
 
-        mock_shop_database = Mock()
+        mock_shop_database = MagicMock()
         mock_shop_database.client_post.return_value = {'id': 2}
         mock_shop_database.client_get.side_effect = lambda id_client=None: get_side_effect('clients', id_client)
         mock_shop_database.client_delete.return_value = {}

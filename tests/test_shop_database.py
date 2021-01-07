@@ -1,6 +1,6 @@
 import unittest
 from src.shop.shop_database import ShopDatabase
-from unittest.mock import Mock
+from unittest.mock import Mock, MagicMock
 import requests
 
 
@@ -166,7 +166,7 @@ class TestShopDatabase(unittest.TestCase):
 
     def test_init_wrong_type(self):
         with self.assertRaisesRegex(TypeError, "^Api URL must be a string$"):
-            ShopDatabase(545)
+            ShopDatabase(MagicMock(spec=int))
 
     def test_init_invalid(self):
         with self.assertRaisesRegex(ValueError, "^Api URL must be a valid url$"):
@@ -178,7 +178,7 @@ class TestShopDatabase(unittest.TestCase):
 
     def test_client_get_wrong_type(self):
         with self.assertRaisesRegex(TypeError, "^Client ID must be an integer$"):
-            self.shop_database.client_get('1')
+            self.shop_database.client_get(MagicMock(spec=str))
 
     def test_client_get_missing(self):
         with self.assertRaisesRegex(LookupError, "^Client with such ID doesn't exist$"):
@@ -219,7 +219,7 @@ class TestShopDatabase(unittest.TestCase):
 
     def test_client_post_wrong_type_name(self):
         with self.assertRaisesRegex(TypeError, "^Names and email must be strings$"):
-            self.shop_database.client_post(434, 'Red', 'harry_red@example.com')
+            self.shop_database.client_post(MagicMock(spec=int), 'Red', 'harry_red@example.com')
 
     def test_client_post_empty_name(self):
         with self.assertRaisesRegex(ValueError, "^Both names must be non-empty$"):
@@ -227,7 +227,7 @@ class TestShopDatabase(unittest.TestCase):
 
     def test_client_post_wrong_type_email(self):
         with self.assertRaisesRegex(TypeError, "^Names and email must be strings$"):
-            self.shop_database.client_post('Harry', 'Red', 654)
+            self.shop_database.client_post('Harry', 'Red', MagicMock(spec=int))
 
     def test_client_post_invalid_email(self):
         with self.assertRaisesRegex(ValueError, "^Email must be valid$"):
@@ -257,7 +257,7 @@ class TestShopDatabase(unittest.TestCase):
 
     def test_client_delete_wrong_type(self):
         with self.assertRaisesRegex(TypeError, "^Client ID must be an integer$"):
-            self.shop_database.client_delete('1')
+            self.shop_database.client_delete(MagicMock(spec=str))
 
     def test_client_delete_missing(self):
         with self.assertRaisesRegex(LookupError, "^Client with such ID doesn't exist$"):
@@ -284,7 +284,7 @@ class TestShopDatabase(unittest.TestCase):
 
     def test_client_put_wrong_type_name(self):
         with self.assertRaisesRegex(TypeError, "^Names and email must be strings$"):
-            self.shop_database.client_put_patch(1, 'Harry', 434, 'harry_red@example.com')
+            self.shop_database.client_put_patch(1, 'Harry', MagicMock(spec=int), 'harry_red@example.com')
 
     def test_client_put_empty_name(self):
         with self.assertRaisesRegex(ValueError, "^Both names must be non-empty$"):
@@ -292,7 +292,7 @@ class TestShopDatabase(unittest.TestCase):
 
     def test_client_put_wrong_type_id(self):
         with self.assertRaisesRegex(TypeError, "^Client ID must be an integer$"):
-            self.shop_database.client_put_patch('1', 'Harry', 'Red', 'harry_red@example.com')
+            self.shop_database.client_put_patch(MagicMock(spec=str), 'Harry', 'Red', 'harry_red@example.com')
 
     def test_client_put_invalid_email(self):
         with self.assertRaisesRegex(ValueError, "^Email must be valid$"):
@@ -374,7 +374,7 @@ class TestShopDatabase(unittest.TestCase):
 
     def test_item_get_wrong_type(self):
         with self.assertRaisesRegex(TypeError, "^Item ID must be an integer$"):
-            self.shop_database.item_get('0')
+            self.shop_database.item_get(MagicMock(spec=str))
 
     def test_item_get_missing(self):
         with self.assertRaisesRegex(LookupError, "^Item with such ID doesn't exist$"):
@@ -411,11 +411,11 @@ class TestShopDatabase(unittest.TestCase):
 
     def test_item_post_wrong_type_name(self):
         with self.assertRaisesRegex(TypeError, "^Name must be a string$"):
-            self.shop_database.item_post(434, 2199.99)
+            self.shop_database.item_post(MagicMock(spec=int), 2199.99)
 
     def test_item_post_wrong_type_value(self):
         with self.assertRaisesRegex(TypeError, "^Value must be a float$"):
-            self.shop_database.item_post('PlayStation 5', 2199)
+            self.shop_database.item_post('PlayStation 5', MagicMock(spec=int))
 
     def test_item_post_empty_name(self):
         with self.assertRaisesRegex(ValueError, "^Name must not be empty$"):
@@ -444,7 +444,7 @@ class TestShopDatabase(unittest.TestCase):
 
     def test_item_delete_wrong_type(self):
         with self.assertRaisesRegex(TypeError, "^Item ID must be an integer$"):
-            self.shop_database.item_delete('1')
+            self.shop_database.item_delete(MagicMock(spec=str))
 
     def test_item_delete_missing(self):
         with self.assertRaisesRegex(LookupError, "^Item with such ID doesn't exist$"):
@@ -470,11 +470,11 @@ class TestShopDatabase(unittest.TestCase):
 
     def test_item_put_wrong_type_name(self):
         with self.assertRaisesRegex(TypeError, "^Name must be a string$"):
-            self.shop_database.item_put_patch(1, 524, 2000.99)
+            self.shop_database.item_put_patch(1, MagicMock(spec=int), 2000.99)
 
     def test_item_put_wrong_type_value(self):
         with self.assertRaisesRegex(TypeError, "^Value must be a float$"):
-            self.shop_database.item_put_patch(1, 'PlayStation 5', 2000)
+            self.shop_database.item_put_patch(1, 'PlayStation 5', MagicMock(spec=int))
 
     def test_item_put_empty_name(self):
         with self.assertRaisesRegex(ValueError, "^Name must not be empty$"):
@@ -482,7 +482,7 @@ class TestShopDatabase(unittest.TestCase):
 
     def test_item_put_wrong_type_id(self):
         with self.assertRaisesRegex(TypeError, "^Item ID must be an integer$"):
-            self.shop_database.item_put_patch('1', 'PlayStation 5', 2000.99)
+            self.shop_database.item_put_patch(MagicMock(spec=str), 'PlayStation 5', 2000.99)
 
     def test_item_put_more_than_2_decimal(self):
         with self.assertRaisesRegex(ValueError, "^Value must have no more than 2 decimal places$"):
@@ -544,11 +544,11 @@ class TestShopDatabase(unittest.TestCase):
 
     def test_order_post_wrong_type_client(self):
         with self.assertRaisesRegex(TypeError, "^Client ID must be an integer$"):
-            self.shop_database.order_post('1', [0, 2])
+            self.shop_database.order_post(MagicMock(spec=str), [0, 2])
 
     def test_order_post_wrong_type_items(self):
         with self.assertRaisesRegex(TypeError, "^Items IDs must be a list$"):
-            self.shop_database.order_post(1, 0)
+            self.shop_database.order_post(1, MagicMock(spec=int))
 
     def test_order_post_empty_items(self):
         with self.assertRaisesRegex(ValueError, "^Items IDs must not be empty$"):
@@ -556,7 +556,7 @@ class TestShopDatabase(unittest.TestCase):
 
     def test_order_post_wrong_type_items_elements(self):
         with self.assertRaisesRegex(TypeError, "^Items IDs must all be integers$"):
-            self.shop_database.order_post(1, [0, '1', 2])
+            self.shop_database.order_post(1, [0, MagicMock(spec=str), 2])
 
     def test_order_post_mock_check(self):
         order_new = {
@@ -596,7 +596,7 @@ class TestShopDatabase(unittest.TestCase):
 
     def test_order_get_wrong_type(self):
         with self.assertRaisesRegex(TypeError, "^Order ID must be an integer$"):
-            self.shop_database.order_get('0')
+            self.shop_database.order_get(MagicMock(spec=str))
 
     def test_order_get_missing(self):
         with self.assertRaisesRegex(LookupError, "^Order with such ID doesn't exist$"):
@@ -631,7 +631,7 @@ class TestShopDatabase(unittest.TestCase):
 
     def test_order_delete_wrong_type(self):
         with self.assertRaisesRegex(TypeError, "^Order ID must be an integer$"):
-            self.shop_database.order_delete('0')
+            self.shop_database.order_delete(MagicMock(spec=str))
 
     def test_order_delete_missing(self):
         with self.assertRaisesRegex(LookupError, "^Order with such ID doesn't exist$"):
@@ -657,11 +657,11 @@ class TestShopDatabase(unittest.TestCase):
 
     def test_order_put_wrong_type_id_client(self):
         with self.assertRaisesRegex(TypeError, "^Both order and client IDs must be integers$"):
-            self.shop_database.order_put_patch(1, '1', [1, 2])
+            self.shop_database.order_put_patch(1, MagicMock(spec=str), [1, 2])
 
     def test_order_put_wrong_type_list(self):
         with self.assertRaisesRegex(TypeError, "^Items IDs must be a list$"):
-            self.shop_database.order_put_patch(1, 1, 2)
+            self.shop_database.order_put_patch(1, 1, MagicMock(spec=int))
 
     def test_order_put_items_empty(self):
         with self.assertRaisesRegex(ValueError, "^Items IDs must not be empty$"):
@@ -669,7 +669,7 @@ class TestShopDatabase(unittest.TestCase):
 
     def test_order_put_wrong_type_items(self):
         with self.assertRaisesRegex(TypeError, "^Items IDs must all be integers$"):
-            self.shop_database.order_put_patch(1, 1, [1, '2'])
+            self.shop_database.order_put_patch(1, 1, [1, MagicMock(spec=str)])
 
     def test_item_put_missing_order(self):
         with self.assertRaisesRegex(LookupError, "^Referenced entities don't exist$"):

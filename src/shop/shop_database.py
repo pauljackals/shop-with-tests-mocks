@@ -4,7 +4,7 @@ import re
 
 class ShopDatabase:
     def __init__(self, api_url):
-        if type(api_url) != str:
+        if not isinstance(api_url, str):
             raise TypeError("Api URL must be a string")
         elif not re.match(r"(https?://(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?://(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})", api_url):
             raise ValueError("Api URL must be a valid url")
@@ -18,7 +18,7 @@ class ShopDatabase:
 
     @staticmethod
     def __entity_get(request, api_url, endpoint, word, id_entity):
-        if id_entity is not None and type(id_entity) != int:
+        if id_entity is not None and not isinstance(id_entity, int):
             raise TypeError(word.capitalize() + " ID must be an integer")
         else:
             try:
@@ -33,7 +33,7 @@ class ShopDatabase:
 
     @staticmethod
     def __entity_delete(request, api_url, endpoint, word, id_entity):
-        if type(id_entity) != int:
+        if not isinstance(id_entity, int):
             raise TypeError(word.capitalize() + " ID must be an integer")
         else:
             try:
@@ -49,7 +49,7 @@ class ShopDatabase:
         return self.__entity_get(self.request, self.api_url, 'clients', 'client', id_client)
 
     def client_post(self, name_first, name_last, email):
-        if type(name_first) != str or type(name_last) != str or type(email) != str:
+        if not isinstance(name_first, str) or not isinstance(name_last, str) or not isinstance(email, str):
             raise TypeError("Names and email must be strings")
         elif name_first == '' or name_last == '':
             raise ValueError("Both names must be non-empty")
@@ -75,9 +75,9 @@ class ShopDatabase:
     def client_put_patch(self, id_client, name_first=None, name_last=None, email=None):
         if name_first == name_last == email is None:
             raise AttributeError("Patch must have at least one attribute")
-        elif type(id_client) != int:
+        elif not isinstance(id_client, int):
             raise TypeError("Client ID must be an integer")
-        elif (name_first is not None and type(name_first) != str) or (name_last is not None and type(name_last) != str) or (email is not None and type(email) != str):
+        elif (name_first is not None and not isinstance(name_first, str)) or (name_last is not None and not isinstance(name_last, str)) or (email is not None and not isinstance(email, str)):
             raise TypeError("Names and email must be strings")
         elif name_first == '' or name_last == '':
             raise ValueError("Both names must be non-empty")
@@ -104,9 +104,9 @@ class ShopDatabase:
         return self.__entity_get(self.request, self.api_url, 'items', 'item', id_item)
 
     def item_post(self, name, value):
-        if type(name) != str:
+        if not isinstance(name, str):
             raise TypeError("Name must be a string")
-        elif type(value) != float:
+        elif not isinstance(value, float):
             raise TypeError("Value must be a float")
         elif name == '':
             raise ValueError("Name must not be empty")
@@ -128,11 +128,11 @@ class ShopDatabase:
     def item_put_patch(self, id_item, name=None, value=None):
         if name == value is None:
             raise AttributeError("Patch must have at least one attribute")
-        elif type(id_item) != int:
+        elif not isinstance(id_item, int):
             raise TypeError("Item ID must be an integer")
-        elif name is not None and type(name) != str:
+        elif name is not None and not isinstance(name, str):
             raise TypeError("Name must be a string")
-        elif value is not None and type(value) != float:
+        elif value is not None and not isinstance(value, float):
             raise TypeError("Value must be a float")
         elif name == '':
             raise ValueError("Name must not be empty")
@@ -153,16 +153,16 @@ class ShopDatabase:
                 raise ConnectionError("Can't " + method + " item in database")
 
     def order_post(self, id_client, ids_items):
-        if type(id_client) != int:
+        if not isinstance(id_client, int):
             raise TypeError("Client ID must be an integer")
-        elif type(ids_items) != list:
+        elif not isinstance(ids_items, list):
             raise TypeError("Items IDs must be a list")
         elif len(ids_items) < 1:
             raise ValueError("Items IDs must not be empty")
         else:
             try:
                 for i in ids_items:
-                    if type(i) != int:
+                    if not isinstance(i, int):
                         raise TypeError("Items IDs must all be integers")
                 response = self.request('post', self.api_url + '/orders/', data={
                     'id_client': id_client,
@@ -184,16 +184,16 @@ class ShopDatabase:
     def order_put_patch(self, id_order, id_client=None, ids_items=None):
         if id_client == ids_items is None:
             raise AttributeError("Patch must have at least one attribute")
-        elif type(id_order) != int or (id_client is not None and type(id_client) != int):
+        elif not isinstance(id_order, int) or (id_client is not None and not isinstance(id_client, int)):
             raise TypeError("Both order and client IDs must be integers")
-        elif ids_items is not None and type(ids_items) != list:
+        elif ids_items is not None and not isinstance(ids_items, list):
             raise TypeError("Items IDs must be a list")
         elif ids_items is not None and len(ids_items) < 1:
             raise ValueError("Items IDs must not be empty")
         else:
             if ids_items is not None:
                 for i in ids_items:
-                    if type(i) != int:
+                    if not isinstance(i, int):
                         raise TypeError("Items IDs must all be integers")
             method = 'patch' if None in [id_client, ids_items] else 'put'
             try:

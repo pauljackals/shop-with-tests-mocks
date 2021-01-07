@@ -47,18 +47,6 @@ class ShopDatabase:
 
     def client_get(self, id_client=None):
         return self.__entity_get(self.request, self.api_url, 'clients', 'client', id_client)
-        # if id_client is not None and type(id_client) != int:
-        #     raise TypeError("Client ID must be an integer")
-        # else:
-        #     try:
-        #         response = self.request('get', self.api_url + '/clients/' + ('' if id_client is None else str(id_client)))
-        #         if response.status_code == 404:
-        #             raise LookupError("Client with such ID doesn't exist")
-        #         else:
-        #             return response.json()
-        #     except requests.RequestException:
-        #         suffix = id_client is None and 's' or ''
-        #         raise ConnectionError("Can't get client" + suffix + " from database")
 
     def client_post(self, name_first, name_last, email):
         if type(name_first) != str or type(name_last) != str or type(email) != str:
@@ -83,17 +71,6 @@ class ShopDatabase:
 
     def client_delete(self, id_client):
         return self.__entity_delete(self.request, self.api_url, 'clients', 'client', id_client)
-        # if type(id_client) != int:
-        #     raise TypeError("Client ID must be an integer")
-        # else:
-        #     try:
-        #         response = self.request('delete', self.api_url + '/clients/' + str(id_client))
-        #         if response.status_code == 404:
-        #             raise LookupError("Client with such ID doesn't exist")
-        #         else:
-        #             return response.json()
-        #     except requests.RequestException:
-        #         raise ConnectionError("Can't delete client from database")
 
     def client_put_patch(self, id_client, name_first=None, name_last=None, email=None):
         if name_first == name_last == email is None:
@@ -125,18 +102,6 @@ class ShopDatabase:
 
     def item_get(self, id_item=None):
         return self.__entity_get(self.request, self.api_url, 'items', 'item', id_item)
-        # if id_item is not None and type(id_item) != int:
-        #     raise TypeError("Item ID must be an integer")
-        # else:
-        #     try:
-        #         response = self.request('get', self.api_url + '/items/' + ('' if id_item is None else str(id_item)))
-        #         if response.status_code == 404:
-        #             raise LookupError("Item with such ID doesn't exist")
-        #         else:
-        #             return response.json()
-        #     except requests.RequestException:
-        #         suffix = id_item is None and 's' or ''
-        #         raise ConnectionError("Can't get item" + suffix + " from database")
 
     def item_post(self, name, value):
         if type(name) != str:
